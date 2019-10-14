@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
+const mongooseHidden = require('mongoose-hidden')()
 
 const AnimeListSchema = new Schema({
   userId: String,
@@ -12,4 +13,6 @@ const AnimeListSchema = new Schema({
   similarList: [{ listId: String, listScore: Number }]
 })
 
+AnimeListSchema.set('toJSON', { virtuals: true })
+AnimeListSchema.plugin(mongooseHidden, { virtuals: { similarList: 'toJSON' } })
 module.exports = mongoose.model('AnimeList', AnimeListSchema)
