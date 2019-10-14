@@ -1,0 +1,23 @@
+{
+  "name": "animexp-server-v2",
+  "version": "1.0.0",
+  "description": "",
+  "devDependencies": {
+    "standard": "*"
+  },
+  "main": "app .js",
+  "scripts": {
+    "dev": "nodemon ./bin/www",
+    "start": "pm2-runtime ./bin/www -i max",
+    "test": "mocha ./test"
+  },
+  "keywords": [],
+  "author": "Keoni Murral & Shane Austrie",
+  "license": "ISC",
+  "dependencies": {
+    "check-types": "^10.0.0",
+    "express": "^4.17.1",
+    "morgan": "^1.9.1",
+    "pm2": "^4.0.0"
+  }
+}
