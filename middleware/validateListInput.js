@@ -10,7 +10,7 @@ exports.validateListInput = async function (req, res, next) {
   const validateDescriptionIsTypeString = check.string(body[2])
 
   // check if list has a name that has only letters
-  const validateNameHasLetters = validator.isAlpha(body[1])
+  const validateNameHasLetters = validator.isAlpha(validator.blacklist(body[1], ' '))
 
   // check if input is valid
   if (validateListIsTypeArray && validateNameHasLetters && validateNameIsTypeString && validateDescriptionIsTypeString) {
