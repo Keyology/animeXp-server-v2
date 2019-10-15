@@ -36,3 +36,15 @@ exports.validateUserName = async function (userName) {
   }
   return valid
 }
+
+exports.validatePhoneNumber = async function (phoneNumber) {
+  let valid = false
+  try {
+    if (validator.isMobilePhone(phoneNumber)) {
+      valid = true
+    }
+  } catch (error) {
+    console.error(error)
+  }
+  return valid
+}

@@ -1,10 +1,19 @@
 const check = require('check-types')
+const validator = require('../../common/validator')
 
 exports.checkBodyValue = async function (req, res, next) {
-  const body = Object.values(req.body)
-  if (check.string(body[0]) && check.string(body[1])) {
+  const validBody = check.object(req.body)
+  const validEmail = validator.validateEmail(req.email)
+  const validPassword = validator.validatePassword(req.password)
+  if (validBody && validEmail && validPassword) {
     return next()
   } else {
-    return res.status(412).send({ message: 'invalid body' })
+    let errorMessage = null
+    if (!validEmail) errorMessage = 'Invalid email'
+    if (!validPassword) errorMessage = 'Invalid password'
+    if (!validEmail && !validPassword) errorMessage = 'Invalid email and password'
+    if (!validBody) errorMessage = 'Invalid body'
+
+    return res.status(412).send({ message: errorMessage })
   }
 }
