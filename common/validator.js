@@ -1,37 +1,38 @@
-const check = require("check-types");
+const check = require('check-types')
+const validator = require('validator')
 
-exports.validateEmail = async function(email) {
-  let valid = false;
+exports.validateEmail = async function (email) {
+  let valid = false
   try {
     if (check.string(email) && validator.isEmail(email)) {
-      valid = true;
+      valid = true
     }
   } catch (error) {
-    console.error(error);
+    console.error(error)
   }
-  return valid;
-};
+  return valid
+}
 
-exports.validatePassword = async function(password) {
-  let valid = false;
+exports.validatePassword = async function (password) {
+  let valid = false
   try {
     if (check.string(password) && password.length >= 10) {
-      valid = true;
+      valid = true
     }
   } catch (error) {
-    console.error(error);
+    console.error(error)
   }
-  return valid;
-};
+  return valid
+}
 
-exports.validateUserName = async function(userName) {
-  let valid = false;
+exports.validateUserName = async function (userName) {
+  let valid = false
   try {
-    if (check.string(userName) ? true : false) {
-      valid = true;
+    if (check.string(userName)) {
+      valid = true
     }
   } catch (error) {
-    console.error(error);
+    console.error(error)
   }
-  return valid;
-};
+  return valid
+}

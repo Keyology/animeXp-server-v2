@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
-const mongooseHidden = require("mongoose-hidden")();
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
+const mongooseHidden = require('mongoose-hidden')()
 
 const UserSchema = new Schema({
   userId: {
@@ -52,21 +52,21 @@ const UserSchema = new Schema({
   userAnimeList: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "AnimeList"
+      ref: 'AnimeList'
     }
   ],
   animeRating: [[Number], [Number]]
-});
+})
 
-UserSchema.set("toJSON", { virtuals: true });
+UserSchema.set('toJSON', { virtuals: true })
 UserSchema.plugin(mongooseHidden, {
   virtuals: {
-    createdAt: "hideJSON",
-    password: "hideJSON",
-    phoneNumber: "hideJSON",
-    lastActive: "hideJSON",
-    carrier: "hideJSON"
+    createdAt: 'hideJSON',
+    password: 'hideJSON',
+    phoneNumber: 'hideJSON',
+    lastActive: 'hideJSON',
+    carrier: 'hideJSON'
   }
-});
+})
 
-module.exports = mongoose.model("User", UserSchema);
+module.exports = mongoose.model('User', UserSchema)
