@@ -1,6 +1,6 @@
 const helper = require('./SignInHelper')
 
-exports.signIn = async function (req, res) {
+exports.signin = async function (req, res) {
   const body = {
     email: req.body.email,
     password: req.body.password

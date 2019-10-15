@@ -1,6 +1,5 @@
-const User = require('../models/user')
+const User = require('../../../models/user')
 const bcrypt = require('bcryptjs')
-const validate = require('../../common/validator')
 const JWT = require('jsonwebtoken')
 
 exports.signInLogic = async function (data) {
@@ -26,18 +25,4 @@ exports.signInLogic = async function (data) {
     jwtToken = bcryptResult.token
   }
   return { successfullySignedIn, jwtToken }
-}
-
-exports.bodyValid = async function (body) {
-  const validEmail = await validate.validateEmail(body.email)
-  const validPassword = await validate.validatePassword(body.password)
-  let errorMessage = null
-  if (!validEmail || !validPassword) {
-    errorMessage = (
-      !validEmail && !validPassword ? 'Invalid email and password' : (
-        !validEmail ? 'Invalid email' : 'Invalid password'
-      )
-    )
-  }
-  return errorMessage
 }

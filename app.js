@@ -31,7 +31,7 @@ app.post(
   '/api/v0/create/new/list',
   validateList.validateListInput,
   createListRoute.createList
-  )
+)
 app.get(
   '/api/v0/search/:query',
   queryTypeString.checkIfQueryIsString,

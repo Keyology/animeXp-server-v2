@@ -1,7 +1,7 @@
-const User = require('../models/user')
+const User = require('../../../models/user')
 const shortId = require('shortid')
 const bcrypt = require('bcryptjs')
-const validate = require('../../common/validator')
+const validate = require('../../../common/validator')
 const JWT = require('jsonwebtoken')
 
 const getIdFromJWTToken = async function (token) {
@@ -89,18 +89,10 @@ exports.signUpImplicitLogic = function () {
 }
 
 exports.bodyValid = async function (body) {
-  const validEmail = await validate.validateEmail(body.email)
-  const validPassword = await validate.validatePassword(body.password)
   const validPhoneNumber = await validate.validatePhoneNumber(body.phoneNumber)
   const validCarrier = await validate.validateCarrier(body.carrier)
   let errorMessage = null
-  if (!validEmail || !validPassword) {
-    errorMessage = (
-      !validEmail && !validPassword ? 'Invalid email and password' : (
-        !validEmail ? 'Invalid email' : 'Invalid password'
-      )
-    )
-  } else if (body.hasPhoneNumber === true) {
+  if (body.hasPhoneNumber === true) {
     if (!validPhoneNumber || !validCarrier) {
       errorMessage = (
         !validPhoneNumber && !validCarrier ? 'Invalid phone number and carrier' : (
