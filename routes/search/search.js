@@ -8,13 +8,15 @@ exports.searchForAnime = async function (req, res) {
     const queryIsId = await helper.checkIfQueryIsAnimeId(searchQuery)
     if (!queryIsId) {
       const searchResuts = await queryDb.searchAnimeByName(searchQuery)
-      if (searchResuts !== null) return res.json(searchResuts).status(200)
-      const kitsuResp = kitsuApi.getAnimeFromKitsuByTitle(searchQuery)
+      if (searchResuts !== null && Object.entries(searchResuts).length !== 0) return res.json(searchResuts).status(200)
+      const kitsuResp = await kitsuApi.getAnimeFromKitsuByTitle(searchQuery)
       if (kitsuResp === null) return res.status(400).send({ message: 'Invalid Input' })
-      const savekitsuRespToDb = await queryDb.savekitsuRespToDb(kitsuResp)
-      return savekitsuRespToDb === true ? res.json(searchResuts).status(200) : res.status(503).send({ message: 'query does not exist' })
+      await searchResuts['queryDb.searchAnimeByName'](searchQuery)
+      return kitsuResp !== null ? res.json(searchResuts).status(200) : res.status(503).send({ message: 'query does not exist' })
     }
-    // if query is an id create helper function for searching db and return result
+    // search for anime by id if not null return results otherwise call kitsu to get anime  
+   // if anime id is 24 charcters don't pass to kitsu api call return could not find anime 
+   // otherwise save kitsu response to db and return 
   } catch (error) {
     res.status(412).send({ message: 'Invalid input' })
     console.error(`COULD NOT FIND QUERY: ${searchQuery}`)

@@ -26,12 +26,12 @@ const getTitles = attributes => {
   return titles
 }
 
-exports.parseAnimeData = anime => {
+exports.parseAnimeData = async anime => {
   return {
     animeId: new mongoose.Types.ObjectId(),
     animeSlug: anime.attributes.slug,
     animeSynopsis: anime.attributes.synopsis,
-    animeTitles: getTitles(anime.attributes),
+    animeTitles: await getTitles(anime.attributes),
     animeCoverImg: anime.attributes.coverImage
       ? anime.attributes.coverImage.original
       : null,

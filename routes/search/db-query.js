@@ -12,10 +12,15 @@ exports.searchAnimeByName = async (query) => {
 }
 
 exports.saveKitsuAnimeToDb = async (data) => {
-  const animes = []
-  for (let i = 0; i < data.data.length; i++) {
-    animes.push(await cleanData.parseAnimeData(data.data[i]))
-    await new Anime(animes[i]).save()
+  try {
+    const animes = []
+    for (let i = 0; i < data.data.length; i++) {
+      animes.push(await cleanData.parseAnimeData(data.data[i]))
+      await new Anime(animes[i]).save()
+    }
+    return true
+  } catch (error) {
+    console.error('ERROR SAVING KITSU ANIME TO DB:', error)
+    return false
   }
-  return true
 }
