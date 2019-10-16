@@ -4,6 +4,7 @@ const assert = require('assert')
 
 const url = process.env.db_url
 
+
 mongoose.Promise = global.Promise
 mongoose.connect(
   url,

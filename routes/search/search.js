@@ -1,10 +1,14 @@
-
 const checkQueryTypeString = require('./helper')
+const searchJob = require('..//..//jobs/searchAnimeInDb')
 
 exports.searchDbForAnime = async function (req, res) {
   console.log('---QUERY----', req.params.query)
-  
-  return checkQueryTypeString.checkIfQueryIsAnimeId(req.params.query) ? console.log('---HIT---') : console.log("---NOT HIT------")
+
+  const result = await searchJob.searchAnimeByName(req.params.query)
+
+  console.log('---RESULT----', result)
+
+//   return checkQueryTypeString.checkIfQueryIsAnimeId(req.params.query) ? console.log('---HIT---') : console.log("---NOT HIT------")
 
 
     // validate query is string 
