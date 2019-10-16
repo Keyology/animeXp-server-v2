@@ -18,7 +18,6 @@ const agenda = agendaFunctions.agenda
 // }
 
 exports.searchAnimeByName = async (query) => {
-  Anime.createIndexes({ animeTitles: 1 })
-  const anime = Anime.find({ animeTitles: { $regex: new RegExp(query, 'i') } }).lean().limit(15).explain()
+  const anime = Anime.find({ animeTitles: { $elemMatch: { $regex: new RegExp(query, 'i') } } }).lean().limit(15).explain()
   return anime
 }
