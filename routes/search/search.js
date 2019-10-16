@@ -1,31 +1,23 @@
-const checkQueryTypeString = require('./helper')
-const searchJob = require('..//..//jobs/searchAnimeInDb')
+const helper = require('./helper')
+const kitsuApi = require('./kitsuApi')
+const queryDb = require('./db-query')
 
-exports.searchDbForAnime = async function (req, res) {
-  console.log('---QUERY----', req.params.query)
-
-  const result = await searchJob.searchAnimeByName(req.params.query)
-
-  console.log('---RESULT----', result)
-
-//   return checkQueryTypeString.checkIfQueryIsAnimeId(req.params.query) ? console.log('---HIT---') : console.log("---NOT HIT------")
-
-
-    // validate query is string 
-    //check if string contains numbers of a certain length 
-    //create a helper function for search that searches the db for the anime
-    // if the db returs null call another helper function that scrapes data from kitsu
-
-    // and parses / process data
-
-// save data to db and return the results
-
-
-
-
-// validate query 
-// check if string contains numbers and is a certain length  to determine it's an id
-
-
-
+exports.searchForAnime = async function (req, res) {
+  const searchQuery = req.params.query
+  try {
+    const queryIsId = await helper.checkIfQueryIsAnimeId(searchQuery)
+    if (!queryIsId) {
+      const searchResuts = await queryDb.searchAnimeByName(searchQuery)
+      if (searchResuts !== null) return res.json(searchResuts).status(200)
+      const kitsuResp = kitsuApi.getAnimeFromKitsuByTitle(searchQuery)
+      if (kitsuResp === null) return res.status(400).send({ message: 'Invalid Input' })
+      const savekitsuRespToDb = await queryDb.savekitsuRespToDb(kitsuResp)
+      return savekitsuRespToDb === true ? res.json(searchResuts).status(200) : res.status(503).send({ message: 'query does not exist' })
+    }
+    // if query is an id create helper function for searching db and return result
+  } catch (error) {
+    res.status(412).send({ message: 'Invalid input' })
+    console.error(`COULD NOT FIND QUERY: ${searchQuery}`)
+    console.error('SEARCH ERROR:', error)
+  }
 }
