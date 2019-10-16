@@ -1,5 +1,7 @@
 const mongoose = require('mongoose')
 
+// get data from kitsu and map it to the anime model
+
 const getTitles = attributes => {
   const titles = []
   if (attributes.canonicalTitle) {

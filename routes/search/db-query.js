@@ -12,6 +12,7 @@ exports.searchAnimeByName = async (query) => {
 }
 
 exports.saveKitsuAnimeToDb = async (data) => {
+  // get data we need from kitsu and save it to the database
   try {
     const animes = []
     for (let i = 0; i < data.data.length; i++) {
