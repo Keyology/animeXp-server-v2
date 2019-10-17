@@ -1,43 +1,42 @@
 const User = require('../../../models/user')
-const shortId = require('shortid')
 const bcrypt = require('bcryptjs')
 const validate = require('../../../common/validator')
 const JWT = require('jsonwebtoken')
 
 const getIdFromJWTToken = async function (token) {
   const tokenResults = await JWT.verify(token, process.env.SECRECT, { algorithm: 'HS256' }, (error, decode) => {
+    let generateNewId = false
     let id = null
-    let newUser = false
     const expired = (error && error.message === 'jwt expired')
     if (!error && !expired) id = decode._id
     if (expired) {
-      newUser = true
-      id = shortId.generate()
+      generateNewId = true
     }
-    return { newUser, id }
+    return { id, generateNewId }
   })
   return tokenResults
 }
 
 exports.signUpLogic = async function (data) {
+  let userId = null
+  let newUser = true
+  let generateNewId = false
   let successfullySignedUp = false
   let jwtToken = null
-  let newUser = false
-  let userId = null
+  let errorMessage = 'Error signing up user'
 
   try {
     if (data.token) {
-      const tokenResults = getIdFromJWTToken(data.token)
-      newUser = tokenResults.newUser
-      userId = tokenResults.userId
-    } else {
-      userId = shortId.generate()
+      newUser = false
+      const jwtResult = await getIdFromJWTToken(data.token)
+      userId = jwtResult.id
+      generateNewId = jwtResult.generateNewId
     }
-
-    if (userId) {
+    if (data.token || newUser || generateNewId) {
+      console.log('0')
+      console.log('1')
       let user = null
       const userDataObject = {
-        userId: userId,
         userEmail: data.email,
         password: await bcrypt.hash(data.password, 10),
         isSignedUp: true
@@ -45,28 +44,38 @@ exports.signUpLogic = async function (data) {
       if (data.hasPhoneNumber) {
         userDataObject.phoneNumber = data.phoneNumber
       }
-      if (newUser) {
+      if (newUser || generateNewId) {
+        user = new User(userDataObject)
+        await user.save()
+        userId = user.userId
+      } else {
         user = await User.findOneAndUpdate(
-          { userId: userId },
+          { userId: userId, email: null, phoneNumber: null },
           userDataObject
         )
-      } else {
-        user = new User(userDataObject)
       }
-      await user.save()
       jwtToken = JWT.sign(
         { _id: userId },
-        process.env.SECRECT,
-        { algorithm: 'HS256' },
-        { expiresIn: '30 days' }
+        process.env.SECRET,
+        {
+          algorithm: 'HS256'
+        }
       )
       successfullySignedUp = true
+      console.log('2')
     }
   } catch (exception) {
     console.log('Exception:', exception)
+    const error = String(exception).toLowerCase()
+    if (error.includes('email')) {
+      errorMessage = 'Email already registered'
+    }
+    if (error.includes('phonenumber')) {
+      errorMessage = 'Phone number already registered'
+    }
   }
-
-  return { successfullySignedUp, jwtToken }
+  console.log('Helper:', successfullySignedUp, jwtToken)
+  return { successfullySignedUp, jwtToken, errorMessage }
 }
 
 exports.signUpImplicitLogic = function () {
@@ -77,22 +86,25 @@ exports.signUpImplicitLogic = function () {
     new User({ userId: userId }).save()
     jwtToken = JWT.sign(
       { _id: userId },
-      process.env.SECRECT,
-      { algorithm: 'HS256' },
-      { expiresIn: '24 hours' }
+      process.env.SECRET,
+      {
+        algorithm: 'HS256',
+        expiresIn: '24 h'
+      }
     )
     successfullySignedUp = true
   } catch (exception) {
     console.log('Exception:', exception)
   }
+  console.log('jwtToken', jwtToken)
   return { successfullySignedUp, jwtToken }
 }
 
-exports.bodyValid = async function (body) {
-  const validPhoneNumber = await validate.validatePhoneNumber(body.phoneNumber)
-  const validCarrier = await validate.validateCarrier(body.carrier)
+exports.bodyValid = function (body) {
   let errorMessage = null
   if (body.hasPhoneNumber === true) {
+    const validPhoneNumber = validate.validatePhoneNumber(body.phoneNumber)
+    const validCarrier = validate.validateCarrier(body.carrier)
     if (!validPhoneNumber || !validCarrier) {
       errorMessage = (
         !validPhoneNumber && !validCarrier ? 'Invalid phone number and carrier' : (

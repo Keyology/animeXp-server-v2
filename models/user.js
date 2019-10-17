@@ -4,9 +4,7 @@ const mongooseHidden = require('mongoose-hidden')()
 
 const UserSchema = new Schema({
   userId: {
-    type: String,
-    required: true,
-    unique: true
+    type: mongoose.type.ObjectId
   },
 
   createdAt: {
@@ -58,7 +56,18 @@ const UserSchema = new Schema({
   animeRating: [[Number], [Number]]
 })
 
+UserSchema.index({
+  userEmail: 1,
+  phoneNumber: 1,
+  userId: 1
+
+}, {
+  unique: true,
+  sparse: true
+})
+
 UserSchema.set('toJSON', { virtuals: true })
+
 UserSchema.plugin(mongooseHidden, {
   virtuals: {
     createdAt: 'hideJSON',

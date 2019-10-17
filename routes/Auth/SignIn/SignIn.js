@@ -7,10 +7,6 @@ exports.signin = async function (req, res) {
   }
   let successfullySignedIn = false
   let jwtToken = null
-  const errorMessage = helper.bodyValid(body)
-  if (errorMessage) {
-    return res.status(412).send({ message: errorMessage })
-  }
   const signInLogicResult = helper.signInLogic(body)
   successfullySignedIn = signInLogicResult.successfullySignedIn
   jwtToken = signInLogicResult.jwtToken

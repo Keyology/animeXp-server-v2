@@ -4,7 +4,8 @@ const Schema = mongoose.Schema
 const AnimeSchema = new Schema({
   animeId: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   },
 
   animeStatus: String,

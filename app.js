@@ -38,13 +38,12 @@ app.get(
   searchAnimeRoute.searchDbForAnime
 )
 app.post(
-  '/api/v2/user/signup',
+  '/api/v0/user/signup',
   authMiddleware.checkBodyValue,
   authSignUp.signup
 )
 app.post(
   '/api/v0/user/signup/implicit',
-  authMiddleware.checkBodyValue,
   authSignUp.signupImplicit
 )
 app.post(

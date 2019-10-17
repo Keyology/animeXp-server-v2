@@ -1,10 +1,11 @@
 const check = require('check-types')
 const validator = require('validator')
+const carriersSet = require('../static/Carriers.js')
 
-exports.validateEmail = async function (email) {
+exports.validateEmail = function (email) {
   let valid = false
   try {
-    if (check.string(email) && validator.isEmail(email)) {
+    if (email && check.string(email) && validator.isEmail(email)) {
       valid = true
     }
   } catch (error) {
@@ -13,10 +14,10 @@ exports.validateEmail = async function (email) {
   return valid
 }
 
-exports.validatePassword = async function (password) {
+exports.validatePassword = function (password) {
   let valid = false
   try {
-    if (check.string(password) && password.length >= 10) {
+    if (password && check.string(password) && password.length >= 7) {
       valid = true
     }
   } catch (error) {
@@ -25,10 +26,10 @@ exports.validatePassword = async function (password) {
   return valid
 }
 
-exports.validateUserName = async function (userName) {
+exports.validateUserName = function (userName) {
   let valid = false
   try {
-    if (check.string(userName)) {
+    if (userName && check.string(userName) && userName.replace(' ', '') !== '') {
       valid = true
     }
   } catch (error) {
@@ -37,10 +38,22 @@ exports.validateUserName = async function (userName) {
   return valid
 }
 
-exports.validatePhoneNumber = async function (phoneNumber) {
+exports.validatePhoneNumber = function (phoneNumber) {
   let valid = false
   try {
-    if (validator.isMobilePhone(phoneNumber)) {
+    if (phoneNumber && check.number(phoneNumber) && validator.isMobilePhone(phoneNumber)) {
+      valid = true
+    }
+  } catch (error) {
+    console.error(error)
+  }
+  return valid
+}
+
+exports.validateCarrier = function (carrier) {
+  let valid = false
+  try {
+    if (carrier && check.string(carrier) && carriersSet.has(carrier)) {
       valid = true
     }
   } catch (error) {

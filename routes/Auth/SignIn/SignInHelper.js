@@ -8,7 +8,7 @@ exports.signInLogic = async function (data) {
 
   const user = await User.findOne({ email: data.email })
   if (user !== null) {
-    const bcryptResult = bcrypt.compare(data.password, user.password, (err, result) => {
+    const bcryptResult = await bcrypt.compare(data.password, user.password, (err, result) => {
       const correct = false
       let token = null
       if (!err) {
