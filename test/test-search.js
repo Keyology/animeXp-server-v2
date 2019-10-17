@@ -32,7 +32,3 @@ describe('Test search endpoint ', () => {
     }).timeout(4000)
   })
 })
-
-// test search route by sending invalid search query
-
-// test sending another type like null to the endpoint
