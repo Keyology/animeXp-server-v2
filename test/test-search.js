@@ -35,10 +35,7 @@ describe('Test search endpoint ', () => {
   })
 })
 
-
-// test search routes for anime that's that's not in db
-
-// test search route by sending invalid string 
+// test search route by sending invalid search query
 
 // test sending another type like null to the endpoint
 
