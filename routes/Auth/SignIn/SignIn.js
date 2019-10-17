@@ -5,15 +5,12 @@ exports.signin = async function (req, res) {
     email: req.body.email,
     password: req.body.password
   }
-  let successfullySignedIn = false
-  let jwtToken = null
-  const signInLogicResult = helper.signInLogic(body)
-  successfullySignedIn = signInLogicResult.successfullySignedIn
-  jwtToken = signInLogicResult.jwtToken
+  const { jwtToken, errorMessage } = await helper.signInLogic(body)
+  console.log('jwtToken', jwtToken, 'errorMessage', errorMessage)
 
-  if (successfullySignedIn) {
+  if (jwtToken) {
     return res.json({ token: jwtToken }).status(200)
   } else {
-    return res.status(503).send({ message: 'Error signing-in user' })
+    return res.status(503).send({ message: errorMessage })
   }
 }

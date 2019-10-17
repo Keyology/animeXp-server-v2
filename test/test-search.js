@@ -21,9 +21,9 @@ describe('Test search endpoint ', () => {
   })
 
   describe('test search routes for anime thats not in db', () => {
-      it('Should return json with status code 200', (done) => {
-        const searchQuery = 'one-piece'
-        chai.request(server)
+    it('Should return json with status code 200', (done) => {
+      const searchQuery = 'one-piece'
+      chai.request(server)
         .get('/api/v0/search/:query')
         .query({ query: searchQuery })
         .end((err, res) => {
@@ -38,4 +38,3 @@ describe('Test search endpoint ', () => {
 // test search route by sending invalid search query
 
 // test sending another type like null to the endpoint
-

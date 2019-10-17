@@ -32,7 +32,7 @@ exports.signUpLogic = async function (data) {
       userId = jwtResult.id
       generateNewId = jwtResult.generateNewId
     }
-    if (data.token || newUser || generateNewId) {
+    if (userId || newUser === true || generateNewId === true) {
       console.log('0')
       console.log('1')
       let user = null
@@ -45,12 +45,11 @@ exports.signUpLogic = async function (data) {
         userDataObject.phoneNumber = data.phoneNumber
       }
       if (newUser || generateNewId) {
-        user = new User(userDataObject)
-        await user.save()
+        user = await new User(userDataObject).save()
         userId = user.userId
       } else {
         user = await User.findOneAndUpdate(
-          { userId: userId, email: null, phoneNumber: null },
+          { _id: userId, email: null, phoneNumber: null },
           userDataObject
         )
       }
@@ -58,7 +57,8 @@ exports.signUpLogic = async function (data) {
         { _id: userId },
         process.env.SECRET,
         {
-          algorithm: 'HS256'
+          algorithm: 'HS256',
+          expiresIn: '30d'
         }
       )
       successfullySignedUp = true
@@ -78,14 +78,13 @@ exports.signUpLogic = async function (data) {
   return { successfullySignedUp, jwtToken, errorMessage }
 }
 
-exports.signUpImplicitLogic = function () {
+exports.signUpImplicitLogic = async function () {
   let successfullySignedUp = false
   let jwtToken = null
   try {
-    const userId = shortId.generate()
-    new User({ userId: userId }).save()
+    const user = await new User().save()
     jwtToken = JWT.sign(
-      { _id: userId },
+      { _id: user._id },
       process.env.SECRET,
       {
         algorithm: 'HS256',

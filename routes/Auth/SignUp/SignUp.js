@@ -1,7 +1,7 @@
 const helper = require('./SignUpHelper')
 
 exports.signupImplicit = async function (req, res) {
-  const { successfullySignedUp, jwtToken } = helper.signUpImplicitLogic()
+  const { successfullySignedUp, jwtToken } = await helper.signUpImplicitLogic()
   if (successfullySignedUp) {
     return res.json({ token: jwtToken }).status(200)
   } else {

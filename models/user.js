@@ -3,9 +3,6 @@ const Schema = mongoose.Schema
 const mongooseHidden = require('mongoose-hidden')()
 
 const UserSchema = new Schema({
-  userId: {
-    type: mongoose.type.ObjectId
-  },
 
   createdAt: {
     type: Date,
@@ -14,8 +11,8 @@ const UserSchema = new Schema({
 
   phoneNumber: {
     type: String,
-    default: null,
-    unique: true
+    unique: true,
+    sparse: true
   },
 
   carrier: {
@@ -32,8 +29,8 @@ const UserSchema = new Schema({
   },
   userEmail: {
     type: String,
-    default: null,
-    unique: true
+    unique: true,
+    sparse: true
   },
 
   password: {
@@ -56,15 +53,14 @@ const UserSchema = new Schema({
   animeRating: [[Number], [Number]]
 })
 
-UserSchema.index({
-  userEmail: 1,
-  phoneNumber: 1,
-  userId: 1
-
-}, {
-  unique: true,
-  sparse: true
-})
+// UserSchema.index({
+//   userEmail: 1,
+//   phoneNumber: 1
+// }, {
+//   unique: true,
+//   sparse: true,
+//   dropDups: true
+// })
 
 UserSchema.set('toJSON', { virtuals: true })
 

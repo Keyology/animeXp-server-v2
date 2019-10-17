@@ -3,26 +3,33 @@ const bcrypt = require('bcryptjs')
 const JWT = require('jsonwebtoken')
 
 exports.signInLogic = async function (data) {
-  let successfullySignedIn = false
+  let correctPassword = false
   let jwtToken = null
+  let errorMessage = 'Error signing up user'
 
-  const user = await User.findOne({ email: data.email })
-  if (user !== null) {
-    const bcryptResult = await bcrypt.compare(data.password, user.password, (err, result) => {
-      const correct = false
-      let token = null
-      if (!err) {
-        token = JWT.sign(
+  try {
+    const user = await User.findOne({ userEmail: data.email })
+    console.log(user)
+    if (user !== null) {
+      correctPassword = await bcrypt.compare(data.password, user.password)
+      console.log('correctPassword', correctPassword)
+      if (correctPassword) {
+        jwtToken = await JWT.sign(
           { _id: user._id },
-          process.env.SECRECT,
-          { algorithm: 'HS256' },
-          { expiresIn: '30 days' }
+          process.env.SECRET,
+          {
+            algorithm: 'HS256',
+            expiresIn: '30d'
+          }
         )
+      } else {
+        errorMessage = 'Incorrect password'
       }
-      return { correct, token }
-    })
-    successfullySignedIn = bcryptResult.correct
-    jwtToken = bcryptResult.token
+    } else {
+      errorMessage = 'Incorrect email'
+    }
+  } catch (exception) {
+    console.log(exception)
   }
-  return { successfullySignedIn, jwtToken }
+  return { jwtToken, errorMessage }
 }
