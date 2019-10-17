@@ -88,4 +88,6 @@ const AnimeSchema = new Schema({
   }
 })
 
+AnimeSchema.index({ animeTitles: 1, animeId: 1, type: -1 }, { unique: true })
+
 module.exports = mongoose.model('Anime', AnimeSchema)

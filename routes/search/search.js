@@ -1,27 +1,23 @@
+const helper = require('./helper')
+const kitsuApi = require('./kitsuApi')
+const queryDb = require('./db-query')
 
-const checkQueryTypeString = require('./helper')
-
-exports.searchDbForAnime = async function (req, res) {
-  console.log('---QUERY----', req.params.query)
-  
-  return checkQueryTypeString.checkIfQueryIsAnimeId(req.params.query) ? console.log('---HIT---') : console.log("---NOT HIT------")
-
-
-    // validate query is string 
-    //check if string contains numbers of a certain length 
-    //create a helper function for search that searches the db for the anime
-    // if the db returs null call another helper function that scrapes data from kitsu
-
-    // and parses / process data
-
-// save data to db and return the results
-
-
-
-
-// validate query 
-// check if string contains numbers and is a certain length  to determine it's an id
-
-
-
+exports.searchForAnime = async function (req, res) {
+  const searchQuery = req.params.query
+  try {
+    const queryIsId = await helper.checkIfQueryIsAnimeId(searchQuery)
+    if (!queryIsId) {
+      const searchResuts = await queryDb.searchAnimeByName(searchQuery)
+      if (Object.entries(searchResuts).length > 0 && searchResuts !== null) return res.json(searchResuts).status(200)
+      const kitsuResp = await kitsuApi.getAnimeFromKitsuByTitle(searchQuery)
+      if (kitsuResp === null) return res.status(400).send({ message: 'Invalid Input' })
+      const checkForUpdateSearchResults = await queryDb.searchAnimeByName(searchQuery)
+      if (Object.entries(searchResuts).length === 0) return res.status(412).send({ message: 'Invalid Search query' })
+      return res.status(200).json(checkForUpdateSearchResults)
+    }
+  } catch (error) {
+    res.status(412).send({ message: 'Invalid input' })
+    console.error(`COULD NOT FIND QUERY: ${searchQuery}`)
+    console.error('SEARCH ERROR:', error)
+  }
 }
