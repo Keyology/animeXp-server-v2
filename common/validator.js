@@ -1,6 +1,18 @@
 const check = require('check-types')
 const validator = require('validator')
-const carriersSet = require('../static/Carriers.js')
+const Carriers = require('../static/Carriers.js')
+
+exports.hasToken = function (token) {
+  let valid = false
+  try {
+    if (token && check.string(token) && token.length > 0) {
+      valid = true
+    }
+  } catch (error) {
+    console.error('Error:', error)
+  }
+  return valid
+}
 
 exports.validateEmail = function (email) {
   let valid = false
@@ -9,7 +21,7 @@ exports.validateEmail = function (email) {
       valid = true
     }
   } catch (error) {
-    console.error(error)
+    console.error('Error:', error)
   }
   return valid
 }
@@ -21,7 +33,7 @@ exports.validatePassword = function (password) {
       valid = true
     }
   } catch (error) {
-    console.error(error)
+    console.error('Error:', error)
   }
   return valid
 }
@@ -33,7 +45,19 @@ exports.validateUserName = function (userName) {
       valid = true
     }
   } catch (error) {
-    console.error(error)
+    console.error('Error:', error)
+  }
+  return valid
+}
+
+exports.validateHasPhoneNumber = function (hasPhoneNumber) {
+  let valid = false
+  try {
+    if (!hasPhoneNumber || check.boolean(hasPhoneNumber)) {
+      valid = true
+    }
+  } catch (error) {
+    console.error('Error:', error)
   }
   return valid
 }
@@ -41,11 +65,11 @@ exports.validateUserName = function (userName) {
 exports.validatePhoneNumber = function (phoneNumber) {
   let valid = false
   try {
-    if (phoneNumber && check.number(phoneNumber) && validator.isMobilePhone(phoneNumber)) {
+    if (phoneNumber && check.string(phoneNumber) && validator.isMobilePhone(phoneNumber)) {
       valid = true
     }
   } catch (error) {
-    console.error(error)
+    console.error('Error:', error)
   }
   return valid
 }
@@ -53,11 +77,11 @@ exports.validatePhoneNumber = function (phoneNumber) {
 exports.validateCarrier = function (carrier) {
   let valid = false
   try {
-    if (carrier && check.string(carrier) && carriersSet.has(carrier)) {
+    if (carrier && check.string(carrier) && Carriers.CarrierSet.has(carrier)) {
       valid = true
     }
   } catch (error) {
-    console.error(error)
+    console.error('Error:', error)
   }
   return valid
 }

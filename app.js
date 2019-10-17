@@ -7,11 +7,13 @@ const createListRoute = require('./routes/List/CreateList/CreateList')
 const authSignUp = require('./routes/Auth/SignUp/SignUp')
 const authSignIn = require('./routes/Auth/SignIn/SignIn')
 const searchAnimeRoute = require('./routes/Search/search')
+const accountPhoneRoutes = require('./routes/Account/Phone/Phone')
 
 // importting middleware and functions
 const validateList = require('./middleware/validateListInput')
 const queryTypeString = require('./routes/Search/middleware')
 const authMiddleware = require('./middleware/auth/BodyValidator')
+const accountMiddleware = require('./middleware/account/BodyValidator')
 
 // intializing express
 const app = express()
@@ -50,6 +52,17 @@ app.post(
   '/api/v0/user/signin',
   authMiddleware.checkBodyValue,
   authSignIn.signin
+)
+app.get(
+  '/api/v0/user/phone',
+  accountMiddleware.checkHeaderAndBodyValue,
+  accountPhoneRoutes.getPhoneAndCarrier
+)
+
+app.post(
+  '/api/v0/user/phone',
+  accountMiddleware.checkHeaderAndBodyValue,
+  accountPhoneRoutes.setPhoneAndCarrier
 )
 
 module.exports = app

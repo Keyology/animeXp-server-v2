@@ -12,7 +12,7 @@ exports.signInLogic = async function (data) {
     if (user !== null) {
       correctPassword = await bcrypt.compare(data.password, user.password)
       if (correctPassword) {
-        jwtToken = auth.generateJWTToken(user._id, 30)
+        jwtToken = await auth.generateJWTToken(user._id, 30)
       } else {
         errorMessage = 'Incorrect password'
       }
