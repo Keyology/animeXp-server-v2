@@ -27,6 +27,7 @@ exports.signUpLogic = async function (data) {
       }
       if (data.hasPhoneNumber) {
         userDataObject.phoneNumber = data.phoneNumber
+        userDataObject.carrier = data.carrier
       }
       if (newUser || generateNewId) {
         user = await new User(userDataObject).save()
@@ -37,7 +38,7 @@ exports.signUpLogic = async function (data) {
           userDataObject
         )
       }
-      jwtToken = auth.generateJWTToken(userId, 30)
+      jwtToken = await auth.generateJWTToken(userId, 30)
       successfullySignedUp = true
     }
   } catch (exception) {
@@ -58,7 +59,7 @@ exports.signUpImplicitLogic = async function () {
   let jwtToken = null
   try {
     const user = await new User().save()
-    jwtToken = auth.generateJWTToken(user._id, 1)
+    jwtToken = await auth.generateJWTToken(user._id, 1)
     successfullySignedUp = true
   } catch (exception) {
     console.error('Exception:', exception)
@@ -68,6 +69,7 @@ exports.signUpImplicitLogic = async function () {
 
 exports.bodyValid = function (body) {
   let errorMessage = null
+  console.log('body.hasPhoneNumber === true', body.hasPhoneNumber === true)
   if (body.hasPhoneNumber === true) {
     const validPhoneNumber = validate.validatePhoneNumber(body.phoneNumber)
     const validCarrier = validate.validateCarrier(body.carrier)

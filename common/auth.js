@@ -3,15 +3,16 @@ const JWT = require('jsonwebtoken')
 exports.getIdFromJWTToken = async function (token) {
   const tokenResults = await JWT.verify(
     token,
-    process.env.SECRECT,
+    process.env.SECRET,
     { algorithm: 'HS256' },
     (error, decode) => {
       let generateNewId = false
       let id = null
-      const expired = (error && error.message === 'jwt expired')
-      if (!error && !expired) id = decode._id
-      if (expired) {
-        generateNewId = true
+      if (error) {
+        console.error('Error:', error)
+        generateNewId = (error.message === 'jwt expired')
+      } else {
+        id = decode._id
       }
       return { id, generateNewId }
     })

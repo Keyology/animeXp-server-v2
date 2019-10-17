@@ -16,7 +16,7 @@ exports.signup = async function (req, res) {
     hasPhoneNumber: req.body.has_phone_number,
     carrier: req.body.carrier,
     phoneNumber: req.body.phone_number,
-    token: req.body.token
+    token: req.headers ? req.headers.token : null
   }
   const bodyInvalidMessage = helper.bodyValid(body)
   if (bodyInvalidMessage) return res.status(412).send({ message: bodyInvalidMessage })
