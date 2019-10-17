@@ -7,6 +7,6 @@ exports.deleteList = (req, res) => {
     return res.status(200).send({ message: 'List Removed' })
   }).catch((error) => {
     console.error('ERROR DELETING LIST:', error)
-    res.status(422).send({ message: 'Request could not be completed' })
+    return res.status(422).send({ message: 'Request could not be completed' })
   })
 }
