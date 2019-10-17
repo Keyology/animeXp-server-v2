@@ -10,8 +10,7 @@ describe('Test search endpoint ', () => {
     it('Should return json with status code 200', (done) => {
       const searchQuery = 'naruto'
       chai.request(server)
-        .get('/api/v0/search/:query')
-        .query({ query: searchQuery })
+        .get(`/api/v0/search/${searchQuery}`)
         .end((err, res) => {
           res.should.have.status(200)
           res.should.be.a('object')
@@ -21,11 +20,10 @@ describe('Test search endpoint ', () => {
   })
 
   describe('test search routes for anime thats not in db', () => {
-    it('Should return json with status code 200', (done) => {
-      const searchQuery = 'one-piece'
-      chai.request(server)
-        .get('/api/v0/search/:query')
-        .query({ query: searchQuery })
+      it('Should return json with status code 200', (done) => {
+        const searchQuery = 'one piece'
+        chai.request(server)
+        .get(`/api/v0/search/${searchQuery}`)
         .end((err, res) => {
           res.should.have.status(200)
           res.should.be.a('object')

@@ -1,6 +1,5 @@
 const express = require('express')
 const compress = require('compression')
-// const Agendash = require('agendash')
 
 // importing routes
 const homeRoute = require('./routes/home')
@@ -25,9 +24,6 @@ app.use(compress())
 // db setup
 require('dotenv').config({ path: '.env' })
 require('./config/db')
-// const agenda = require('./jobs/agenda')
-
-// app.use('/dash', Agendash(agenda.agenda))
 
 // endpoints
 app.get('/', homeRoute.home)

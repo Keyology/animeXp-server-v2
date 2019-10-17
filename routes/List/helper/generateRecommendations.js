@@ -1,6 +1,6 @@
 const AnimeRecommendations = require('../../../models/animeRecs')
 
-// Each anime in the users original list will have a list associated with them
+// Each anime in the user's original list will have a list of recommendations associated with them,
 // some anime may have a empty list for their recommendations. This method gets the
 // indexes of the lists that are not empty, as well as get the max number recommendations for
 // any of the list of recommendations.
@@ -21,7 +21,6 @@ const getAllowedRecommendationListsAndMaxNumberOfRecommendations = function (rec
 // Sum up the similarity score for each anime recommendation across each anime in the
 // user's anime list, then normalizes it
 const averageScoreForEachRecommendation = function (
-  maxLengthOfRecommendationsPerAnime,
   nonEmptyAnimeListsIndexes,
   recommendationsForEachAnime,
   animeInUserListSet
