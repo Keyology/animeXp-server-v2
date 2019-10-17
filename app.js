@@ -3,7 +3,7 @@ const compress = require('compression')
 
 // importing routes
 const homeRoute = require('./routes/home')
-const createListRoute = require('./routes/List/CreateList/CreateList')
+const createListRoute = require('./routes/List/Create/CreateList')
 const authSignUp = require('./routes/Auth/SignUp/SignUp')
 const authSignIn = require('./routes/Auth/SignIn/SignIn')
 const searchAnimeRoute = require('./routes/Search/search')

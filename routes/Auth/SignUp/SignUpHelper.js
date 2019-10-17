@@ -69,7 +69,6 @@ exports.signUpImplicitLogic = async function () {
 
 exports.bodyValid = function (body) {
   let errorMessage = null
-  console.log('body.hasPhoneNumber === true', body.hasPhoneNumber === true)
   if (body.hasPhoneNumber === true) {
     const validPhoneNumber = validate.validatePhoneNumber(body.phoneNumber)
     const validCarrier = validate.validateCarrier(body.carrier)
