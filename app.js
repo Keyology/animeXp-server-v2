@@ -3,14 +3,14 @@ const compress = require('compression')
 
 // importing routes
 const homeRoute = require('./routes/home')
-const createListRoute = require('./routes/createList/createList')
+const createListRoute = require('./routes/List/CreateList/CreateList')
 const authSignUp = require('./routes/Auth/SignUp/SignUp')
 const authSignIn = require('./routes/Auth/SignIn/SignIn')
-const searchAnimeRoute = require('./routes/search/search')
+const searchAnimeRoute = require('./routes/Search/search')
 
 // importting middleware and functions
 const validateList = require('./middleware/validateListInput')
-const queryTypeString = require('./routes/search/middleware')
+const queryTypeString = require('./routes/Search/middleware')
 const authMiddleware = require('./middleware/auth/BodyValidator')
 
 // intializing express

@@ -1,21 +1,7 @@
 const User = require('../../../models/user')
 const bcrypt = require('bcryptjs')
 const validate = require('../../../common/validator')
-const JWT = require('jsonwebtoken')
-
-const getIdFromJWTToken = async function (token) {
-  const tokenResults = await JWT.verify(token, process.env.SECRECT, { algorithm: 'HS256' }, (error, decode) => {
-    let generateNewId = false
-    let id = null
-    const expired = (error && error.message === 'jwt expired')
-    if (!error && !expired) id = decode._id
-    if (expired) {
-      generateNewId = true
-    }
-    return { id, generateNewId }
-  })
-  return tokenResults
-}
+const auth = require('../../../common/auth')
 
 exports.signUpLogic = async function (data) {
   let userId = null
@@ -28,7 +14,7 @@ exports.signUpLogic = async function (data) {
   try {
     if (data.token) {
       newUser = false
-      const jwtResult = await getIdFromJWTToken(data.token)
+      const jwtResult = await auth.getIdFromJWTToken(data.token)
       userId = jwtResult.id
       generateNewId = jwtResult.generateNewId
     }
@@ -51,14 +37,7 @@ exports.signUpLogic = async function (data) {
           userDataObject
         )
       }
-      jwtToken = JWT.sign(
-        { _id: userId },
-        process.env.SECRET,
-        {
-          algorithm: 'HS256',
-          expiresIn: '30d'
-        }
-      )
+      jwtToken = auth.generateJWTToken(userId, 30)
       successfullySignedUp = true
     }
   } catch (exception) {
@@ -79,14 +58,7 @@ exports.signUpImplicitLogic = async function () {
   let jwtToken = null
   try {
     const user = await new User().save()
-    jwtToken = JWT.sign(
-      { _id: user._id },
-      process.env.SECRET,
-      {
-        algorithm: 'HS256',
-        expiresIn: '24 h'
-      }
-    )
+    jwtToken = auth.generateJWTToken(user._id, 1)
     successfullySignedUp = true
   } catch (exception) {
     console.error('Exception:', exception)
