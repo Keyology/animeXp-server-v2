@@ -19,11 +19,8 @@ exports.signup = async function (req, res) {
     token: req.body.token
   }
   const bodyInvalidMessage = helper.bodyValid(body)
-  console.log('-2', bodyInvalidMessage)
   if (bodyInvalidMessage) return res.status(412).send({ message: bodyInvalidMessage })
-  console.log('-1')
   const { successfullySignedUp, jwtToken, errorMessage } = await helper.signUpLogic(body)
-  console.log(successfullySignedUp, jwtToken)
   if (successfullySignedUp) {
     return res.json({ token: jwtToken }).status(200)
   } else {

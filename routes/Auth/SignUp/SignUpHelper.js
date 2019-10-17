@@ -33,8 +33,6 @@ exports.signUpLogic = async function (data) {
       generateNewId = jwtResult.generateNewId
     }
     if (userId || newUser === true || generateNewId === true) {
-      console.log('0')
-      console.log('1')
       let user = null
       const userDataObject = {
         userEmail: data.email,
@@ -62,10 +60,9 @@ exports.signUpLogic = async function (data) {
         }
       )
       successfullySignedUp = true
-      console.log('2')
     }
   } catch (exception) {
-    console.log('Exception:', exception)
+    console.error('Exception:', exception)
     const error = String(exception).toLowerCase()
     if (error.includes('email')) {
       errorMessage = 'Email already registered'
@@ -74,7 +71,6 @@ exports.signUpLogic = async function (data) {
       errorMessage = 'Phone number already registered'
     }
   }
-  console.log('Helper:', successfullySignedUp, jwtToken)
   return { successfullySignedUp, jwtToken, errorMessage }
 }
 
@@ -93,9 +89,8 @@ exports.signUpImplicitLogic = async function () {
     )
     successfullySignedUp = true
   } catch (exception) {
-    console.log('Exception:', exception)
+    console.error('Exception:', exception)
   }
-  console.log('jwtToken', jwtToken)
   return { successfullySignedUp, jwtToken }
 }
 

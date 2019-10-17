@@ -6,7 +6,6 @@ exports.signin = async function (req, res) {
     password: req.body.password
   }
   const { jwtToken, errorMessage } = await helper.signInLogic(body)
-  console.log('jwtToken', jwtToken, 'errorMessage', errorMessage)
 
   if (jwtToken) {
     return res.json({ token: jwtToken }).status(200)

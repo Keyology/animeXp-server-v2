@@ -9,10 +9,8 @@ exports.signInLogic = async function (data) {
 
   try {
     const user = await User.findOne({ userEmail: data.email })
-    console.log(user)
     if (user !== null) {
       correctPassword = await bcrypt.compare(data.password, user.password)
-      console.log('correctPassword', correctPassword)
       if (correctPassword) {
         jwtToken = await JWT.sign(
           { _id: user._id },
@@ -29,7 +27,7 @@ exports.signInLogic = async function (data) {
       errorMessage = 'Incorrect email'
     }
   } catch (exception) {
-    console.log(exception)
+    console.error(exception)
   }
   return { jwtToken, errorMessage }
 }
