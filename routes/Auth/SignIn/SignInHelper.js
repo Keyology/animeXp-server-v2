@@ -1,6 +1,6 @@
 const User = require('../../../models/user')
 const bcrypt = require('bcryptjs')
-const JWT = require('jsonwebtoken')
+const auth = require('../../../common/auth')
 
 exports.signInLogic = async function (data) {
   let correctPassword = false
@@ -12,14 +12,7 @@ exports.signInLogic = async function (data) {
     if (user !== null) {
       correctPassword = await bcrypt.compare(data.password, user.password)
       if (correctPassword) {
-        jwtToken = await JWT.sign(
-          { _id: user._id },
-          process.env.SECRET,
-          {
-            algorithm: 'HS256',
-            expiresIn: '30d'
-          }
-        )
+        jwtToken = auth.generateJWTToken(user._id, 30)
       } else {
         errorMessage = 'Incorrect password'
       }
