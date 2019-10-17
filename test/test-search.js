@@ -36,4 +36,3 @@ describe('Test search endpoint ', () => {
 // test search route by sending invalid search query
 
 // test sending another type like null to the endpoint
-
