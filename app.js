@@ -16,7 +16,7 @@ const getListRoute = require('./routes/List/Get/GetList')
 const getListsRoute = require('./routes/Account/Lists/Get/GetLists')
 const authSignUp = require('./routes/Auth/SignUp/SignUp')
 const authSignIn = require('./routes/Auth/SignIn/SignIn')
-const searchAnimeRoute = require('./routes/Search/search')
+const searchAnimeRoute = require('./routes/search/search')
 const accountPhoneRoutes = require('./routes/Account/Phone/Phone')
 
 // importting middleware and functions
