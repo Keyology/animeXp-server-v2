@@ -85,3 +85,67 @@ exports.validateCarrier = function (carrier) {
   }
   return valid
 }
+
+exports.validateListName = function (listName) {
+  let valid = false
+  try {
+    if (listName && check.string(listName) && listName.replace(' ', '').length > 0) {
+      valid = true
+    }
+  } catch (except) {
+    console.log('Except:', except)
+  }
+  return valid
+}
+
+exports.validateListDescription = function (listDescription, canBeEmpty = true) {
+  let valid = false
+  try {
+    if (listDescription && check.string(listDescription)) {
+      if (canBeEmpty || (listDescription.replace(' ', '').length > 0)) {
+        valid = true
+      }
+    }
+  } catch (except) {
+    console.log('Except:', except)
+  }
+  return valid
+}
+
+exports.validateListItems = function (listItems, canBeEmpty = false) {
+  let valid = false
+  try {
+    if (listItems && check.array(listItems)) {
+      if (listItems.length === 0) {
+        if (canBeEmpty) {
+          valid = true
+        }
+        valid = false
+      } else {
+        valid = true
+        let item
+        for (item of listItems) {
+          if (!item || !check.string(item)) {
+            valid = false
+            break
+          }
+        }
+      }
+    }
+  } catch (except) {
+    console.log('Except:', except)
+  }
+  return valid
+}
+
+exports.validateListId = function (listId) {
+  let valid = false
+  try {
+    if (listId && check.string(listId) && listId.length > 0) {
+      valid = true
+    }
+  } catch (error) {
+    console.error('Error:', error)
+  }
+  return valid
+}

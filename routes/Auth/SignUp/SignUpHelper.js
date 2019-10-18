@@ -1,4 +1,4 @@
-const User = require('../../../models/user')
+const User = require('../../../models/User')
 const bcrypt = require('bcryptjs')
 const validate = require('../../../common/validator')
 const auth = require('../../../common/auth')
@@ -31,7 +31,7 @@ exports.signUpLogic = async function (data) {
       }
       if (newUser || generateNewId) {
         user = await new User(userDataObject).save()
-        userId = user.userId
+        userId = user._id
       } else {
         user = await User.findOneAndUpdate(
           { _id: userId, email: null, phoneNumber: null },

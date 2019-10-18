@@ -44,12 +44,6 @@ const UserSchema = new Schema({
     default: Date.now
   },
 
-  userAnimeList: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'AnimeList'
-    }
-  ],
   animeRating: [[Number], [Number]]
 })
 

@@ -1,4 +1,4 @@
-const User = require('../../../models/user')
+const User = require('../../../models/User')
 const validate = require('../../../common/validator')
 const auth = require('../../../common/auth')
 

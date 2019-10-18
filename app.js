@@ -4,13 +4,14 @@ const compress = require('compression')
 // importing routes
 const homeRoute = require('./routes/home')
 const createListRoute = require('./routes/List/Create/CreateList')
+const updateListRoute = require('./routes/List/Update/UpdateList')
 const authSignUp = require('./routes/Auth/SignUp/SignUp')
 const authSignIn = require('./routes/Auth/SignIn/SignIn')
 const searchAnimeRoute = require('./routes/Search/search')
 const accountPhoneRoutes = require('./routes/Account/Phone/Phone')
 
 // importting middleware and functions
-const validateList = require('./middleware/validateListInput')
+// const validateList = require('./middleware/validateListInput')
 const queryTypeString = require('./routes/Search/middleware')
 const authMiddleware = require('./middleware/auth/BodyValidator')
 const accountMiddleware = require('./middleware/account/BodyValidator')
@@ -30,9 +31,14 @@ require('./config/db')
 // endpoints
 app.get('/', homeRoute.home)
 app.post(
-  '/api/v0/create/new/list',
-  validateList.validateListInput,
+  '/api/v0/list',
+  accountMiddleware.checkHeaderAndBodyValue,
   createListRoute.createList
+)
+app.patch(
+  '/api/v0/list',
+  accountMiddleware.checkHeaderAndBodyValue,
+  updateListRoute.updateList
 )
 app.get(
   '/api/v0/search/:query',
