@@ -7,7 +7,8 @@ exports.getListLogic = async function (data) {
   let list = null
 
   try {
-    list = await AnimeList.findById({ _id: data.listId })
+    const fieldsToHide = { userId: 0 }
+    list = await AnimeList.findById({ _id: data.listId }, fieldsToHide).lean()
     success = !(list === null)
     if (!success) errorMessage = 'Bad list id'
   } catch (error) {

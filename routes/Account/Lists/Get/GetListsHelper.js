@@ -11,7 +11,8 @@ exports.getListsLogic = async function (data) {
     const { id, tokenExpired } = await auth.getIdFromJWTToken(data.token)
 
     if (id) {
-      lists = await AnimeList.find({ userId: id })
+      const fieldsToHide = { userId: 0 }
+      lists = await AnimeList.find({ userId: id }, fieldsToHide).lean()
       success = true
     } else if (tokenExpired) {
       errorMessage = 'Token expired'
