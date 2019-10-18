@@ -101,9 +101,7 @@ exports.validateListName = function (listName) {
 exports.validateListDescription = function (listDescription, canBeEmpty = true) {
   let valid = false
   try {
-    console.log('listDescription && check.string(listDescription)', listDescription && check.string(listDescription))
     if ((listDescription || listDescription === '') && check.string(listDescription)) {
-      console.log('canBeEmpty || (listDescription.replace.length > 0)', canBeEmpty || (listDescription.replace(' ', '').length > 0))
       if (canBeEmpty || (listDescription.replace(' ', '').length > 0)) {
         valid = true
       }
