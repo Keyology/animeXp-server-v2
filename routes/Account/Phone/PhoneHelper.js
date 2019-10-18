@@ -30,7 +30,6 @@ exports.getPhoneAndCarrierLogic = async function (data) {
 exports.setPhoneAndCarrierLogic = async function (data) {
   let success = false
   let errorMessage = 'Error getting carrier and phone number'
-  console.log('setPhoneAndCarrierLogic')
   try {
     const { id, generateNewId } = await auth.getIdFromJWTToken(data.token)
     if (id) {
