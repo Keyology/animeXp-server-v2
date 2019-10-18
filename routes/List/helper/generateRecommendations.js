@@ -1,4 +1,4 @@
-const AnimeRecommendations = require('../../../models/animeRecs')
+const AnimeRecommendations = require('../../../models/AnimeRecs')
 
 // Each anime in the user's original list will have a list of recommendations associated with them,
 // some anime may have a empty list for their recommendations. This method gets the
@@ -76,9 +76,12 @@ const getMostPopularAnimeUsingAverageScore = function (animeList, recommendation
 
 // Public method for generation anime recommendations for an anime list
 exports.generateRecommendations = async function (userAnimeList) {
+  console.log('userAnimeList', userAnimeList)
+  // Use a filter here in order to not make a second call
   const recommendations = await AnimeRecommendations.find({
     animeId: { $in: userAnimeList }
   })
+  console.log('recommendations in generate', recommendations)
   if (recommendations.length === 0) return []
   return getMostPopularAnimeUsingAverageScore(userAnimeList, recommendations)
 }

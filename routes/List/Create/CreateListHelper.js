@@ -1,7 +1,7 @@
 const AnimeList = require('../../../models/AnimeList')
 const validate = require('../../../common/validator')
 const auth = require('../../../common/auth')
-const recommendations = require('../helper/generateRecommendations')
+const recommendations = require('../helper/generateRecommendationsWithMetaData')
 
 const generateAnimeListObject = async function (userId, data) {
   const animeList = await new AnimeList({
@@ -11,7 +11,7 @@ const generateAnimeListObject = async function (userId, data) {
     animeList: Array.from(
       new Set(data.listItems)
     ),
-    animeRecommendations: await recommendations.generateRecommendations(data.listItems)
+    animeRecommendations: await recommendations.generateRecommendationsWithMetaData(data.listItems)
   })
   return animeList
 }
@@ -19,12 +19,13 @@ const generateAnimeListObject = async function (userId, data) {
 exports.createListLogic = async function (data) {
   let success = false
   let errorMessage = null
+  let animeList = null
 
   try {
     const { id, tokenExpired } = await auth.getIdFromJWTToken(data.token)
 
     if (id) {
-      const animeList = await generateAnimeListObject(id, data)
+      animeList = await generateAnimeListObject(id, data)
       await animeList.save()
       success = true
     } else if (tokenExpired) {
@@ -37,7 +38,7 @@ exports.createListLogic = async function (data) {
     errorMessage = 'Error creating list'
   }
 
-  return { success, message: errorMessage }
+  return { success, list: animeList, message: errorMessage }
 }
 
 exports.dataValid = function (data) {

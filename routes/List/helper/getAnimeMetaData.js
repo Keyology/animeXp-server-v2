@@ -1,6 +1,7 @@
-const Anime = require('..//..//..//models/anime')
+const Anime = require('../../../models/Anime')
 
-exports.getAnimeDataForList = async (animeList) => {
+exports.getAnimeDataForList = async function (animeList) {
+  console.log('animeList', animeList)
   const originalIndexes = {}
   for (let i = 0; i < animeList.length; i += 1) {
     originalIndexes[animeList[i]] = i
