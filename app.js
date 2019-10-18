@@ -1,3 +1,9 @@
+/* Copyright (C) Keoni Murray - All Rights Reserved
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Keoni Murray & Shane Austrie keonimurray45@gmail.com
+ */
+
 const express = require('express')
 const compress = require('compression')
 

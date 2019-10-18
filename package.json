@@ -1,4 +1,4 @@
-{
+ {
   "name": "animexp-server-v2",
   "version": "1.0.0",
   "description": "AnimeXP backend server",
@@ -13,7 +13,6 @@
   },
   "keywords": [],
   "author": "Keoni Murray & Shane Austrie",
-  "license": "ISC",
   "dependencies": {
     "agenda": "^2.1.0",
     "bcryptjs": "^2.4.3",
@@ -32,5 +31,8 @@
     "morgan": "^1.9.1",
     "pm2": "^4.0.0",
     "validator": "^11.1.0"
+  },
+  "engines": {
+    "node": "10.x"
   }
 }
