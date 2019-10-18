@@ -1,4 +1,4 @@
-const helper = require('./DeleteListHelper')
+const helper = require('./deleteListHelper')
 
 exports.deleteList = async function (req, res) {
   const data = {

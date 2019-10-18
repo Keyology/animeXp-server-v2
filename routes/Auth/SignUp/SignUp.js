@@ -1,4 +1,4 @@
-const helper = require('./SignUpHelper')
+const helper = require('./signUpHelper')
 
 exports.signupImplicit = async function (req, res) {
   const { successfullySignedUp, jwtToken } = await helper.signUpImplicitLogic()

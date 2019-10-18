@@ -1,4 +1,4 @@
-const helper = require('./PhoneHelper')
+const helper = require('./phoneHelper')
 
 exports.getPhoneAndCarrier = async function (req, res) {
   const body = {

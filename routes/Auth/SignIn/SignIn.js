@@ -1,4 +1,4 @@
-const helper = require('./SignInHelper')
+const helper = require('./signInHelper')
 
 exports.signin = async function (req, res) {
   const body = {

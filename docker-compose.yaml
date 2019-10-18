@@ -1,0 +1,9 @@
+version: '2'
+services: 
+  animexp: 
+    build: . 
+    ports: 
+    - "7000:7000"
+    # volumes: 
+    #   - .:/app
+    command: npm run dev

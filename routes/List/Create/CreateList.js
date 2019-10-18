@@ -1,5 +1,5 @@
 
-const helper = require('./CreateListHelper')
+const helper = require('./createListHelper')
 
 exports.createList = async function (req, res) {
   const data = {

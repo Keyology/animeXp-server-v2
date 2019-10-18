@@ -1,5 +1,5 @@
 
-const helper = require('./UpdateListHelper')
+const helper = require('./updateListHelper')
 
 exports.updateList = async function (req, res) {
   const data = {

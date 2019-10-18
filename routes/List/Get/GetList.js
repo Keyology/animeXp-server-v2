@@ -1,4 +1,4 @@
-const helper = require('./GetListHelper')
+const helper = require('./getListHelper')
 
 exports.getList = async function (req, res) {
   const data = {
