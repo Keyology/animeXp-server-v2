@@ -12,7 +12,7 @@ exports.getListLogic = async function (data) {
     success = !(list === null)
     if (!success) errorMessage = 'Bad list id'
   } catch (error) {
-    console.log('Error:', error)
+    console.error('Error:', error)
     errorMessage = 'Error getting list'
   }
 

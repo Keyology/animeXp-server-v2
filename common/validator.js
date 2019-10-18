@@ -93,7 +93,7 @@ exports.validateListName = function (listName) {
       valid = true
     }
   } catch (except) {
-    console.log('Except:', except)
+    console.error('Except:', except)
   }
   return valid
 }
@@ -107,7 +107,7 @@ exports.validateListDescription = function (listDescription, canBeEmpty = true) 
       }
     }
   } catch (except) {
-    console.log('Except:', except)
+    console.error('Except:', except)
   }
   console.log('valid', valid)
   return valid
@@ -131,7 +131,7 @@ exports.validateListItems = function (listItems, canBeEmpty = false) {
       }
     }
   } catch (except) {
-    console.log('Except:', except)
+    console.error('Except:', except)
   }
   return valid
 }

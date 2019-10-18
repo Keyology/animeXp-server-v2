@@ -35,7 +35,7 @@ exports.updateListLogic = async function (data) {
       errorMessage = 'Bad token'
     }
   } catch (error) {
-    console.log('Error:', error)
+    console.error('Error:', error)
     errorMessage = 'Error updating list'
   }
 
