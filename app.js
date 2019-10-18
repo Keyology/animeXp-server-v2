@@ -9,12 +9,14 @@ const authSignUp = require('./routes/Auth/SignUp/SignUp')
 const authSignIn = require('./routes/Auth/SignIn/SignIn')
 const searchAnimeRoute = require('./routes/Search/search')
 const accountPhoneRoutes = require('./routes/Account/Phone/Phone')
+const deleteListRoute = require('./routes/List/DeleteList/deleteList')
 
 // importting middleware and functions
 // const validateList = require('./middleware/validateListInput')
 const queryTypeString = require('./routes/Search/middleware')
 const authMiddleware = require('./middleware/auth/BodyValidator')
 const accountMiddleware = require('./middleware/account/BodyValidator')
+const validateReq = require('./middleware/Account/BodyValidator')
 
 // intializing express
 const app = express()
@@ -30,6 +32,7 @@ require('./config/db')
 
 // endpoints
 app.get('/', homeRoute.home)
+
 app.post(
   '/api/v0/list',
   accountMiddleware.checkHeaderAndBodyValue,
@@ -39,6 +42,17 @@ app.patch(
   '/api/v0/list',
   accountMiddleware.checkHeaderAndBodyValue,
   updateListRoute.updateList
+)
+app.get(
+  '/api/v0/user/phone',
+  accountMiddleware.checkHeaderAndBodyValue,
+  accountPhoneRoutes.getPhoneAndCarrier
+)
+
+app.post(
+  '/api/v0/user/phone',
+  accountMiddleware.checkHeaderAndBodyValue,
+  accountPhoneRoutes.setPhoneAndCarrier
 )
 app.get(
   '/api/v0/search/:query',
@@ -59,16 +73,11 @@ app.post(
   authMiddleware.checkBodyValue,
   authSignIn.signin
 )
-app.get(
-  '/api/v0/user/phone',
-  accountMiddleware.checkHeaderAndBodyValue,
-  accountPhoneRoutes.getPhoneAndCarrier
-)
 
-app.post(
-  '/api/v0/user/phone',
-  accountMiddleware.checkHeaderAndBodyValue,
-  accountPhoneRoutes.setPhoneAndCarrier
+app.delete(
+  '/api/v0/remove/:listId',
+  validateReq.checkHeaderAndBodyValue,
+  deleteListRoute.deleteList
 )
 
 module.exports = app
