@@ -11,4 +11,4 @@ const AnimeRecsSchema = new Schema({
   animeRecommendations: [{ animeId: String, animeScore: Number }]
 })
 
-module.exports = mongoose.model('AnimeRecsSchema', AnimeRecsSchema)
+module.exports = mongoose.model('AnimeRecommendations', AnimeRecsSchema)
