@@ -29,6 +29,9 @@ app.use(compress())
 require('dotenv').config({ path: '.env' })
 require('./config/db')
 
+const TestFunction = require('./routes/List/helper/getPosterImg')
+
+TestFunction.getAnimeDataForList(['1', '21', '2798', '2829'])
 // endpoints
 app.get('/', homeRoute.home)
 
