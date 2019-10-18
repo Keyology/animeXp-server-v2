@@ -36,7 +36,7 @@ exports.updateListLogic = async function (data) {
     }
   } catch (error) {
     console.log('Error:', error)
-    errorMessage = 'Error signing'
+    errorMessage = 'Error updating list'
   }
 
   return { success, message: errorMessage }
@@ -44,15 +44,10 @@ exports.updateListLogic = async function (data) {
 
 exports.dataValid = function (data) {
   let errorMessage = null
-  const validToken = validate.hasToken(data.token)
   const validListId = validate.validateListId(data.listId)
   const validListItems = validate.validateListItems(data.newItems)
-  if (!validToken || !validListItems || !validListId) {
-    errorMessage = (!validToken
-      ? 'Invalid Token' : (
-        !validListId ? 'Invalid list id' : 'Invalid list or list items'
-      )
-    )
+  if (!validListItems || !validListId) {
+    errorMessage = !validListId ? 'Invalid list id' : 'Invalid list or list items'
   }
   return errorMessage
 }

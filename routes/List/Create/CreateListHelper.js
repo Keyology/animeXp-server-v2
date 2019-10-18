@@ -34,7 +34,7 @@ exports.createListLogic = async function (data) {
     }
   } catch (error) {
     console.log('Error:', error)
-    errorMessage = 'Error signing'
+    errorMessage = 'Error creating list'
   }
 
   return { success, message: errorMessage }
@@ -42,16 +42,13 @@ exports.createListLogic = async function (data) {
 
 exports.dataValid = function (data) {
   let errorMessage = null
-  const validToken = validate.hasToken(data.token)
   const validListName = validate.validateListName(data.listName)
   const validListDescription = validate.validateListDescription(data.listDescription, true)
   const validListItems = validate.validateListItems(data.listItems, true)
-  if (!validToken || !validListName || !validListDescription || !validListItems) {
+  if (!validListName || !validListDescription || !validListItems) {
     errorMessage = (
-      !validToken ? 'Invalid Token' : (
-        !validListItems ? 'Invalid list or list items' : (
-          !validListName ? 'Invalid list name' : 'Invalid list description'
-        )
+      !validListItems ? 'Invalid list or list items' : (
+        !validListName ? 'Invalid list name' : 'Invalid list description'
       )
     )
   }
