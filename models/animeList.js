@@ -6,7 +6,7 @@ const AnimeListSchema = new Schema({
   userId: String,
   animeListName: String,
   animeListDescription: String,
-  animeList: [[String]],
+  animeList: [String],
 
   animeRecommendations: [],
 
@@ -14,5 +14,13 @@ const AnimeListSchema = new Schema({
 })
 
 AnimeListSchema.set('toJSON', { virtuals: true })
-AnimeListSchema.plugin(mongooseHidden, { virtuals: { similarList: 'toJSON' } })
+AnimeListSchema.plugin(
+  mongooseHidden,
+  {
+    virtuals: {
+      userId: 'hideJSON',
+      similarList: 'hideJSON'
+    }
+  }
+)
 module.exports = mongoose.model('AnimeList', AnimeListSchema)

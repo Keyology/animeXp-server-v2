@@ -1,53 +1,56 @@
+const AnimeList = require('../../../models/AnimeList')
 const validate = require('../../../common/validator')
+const auth = require('../../../common/auth')
+const recommendations = require('../helper/generateRecommendations')
 
-// check if input is valid -- DONE
-
-// input list, name, description jwt token
-// once input is validedated check if user has an account
-// check if list is empty
-// if list is empty create user and jwt token
-// save user list to db
-// send jwt token
-// if list is not empty  call background job to get poster img, title,  & description for list
-// get recommendations for list
-// then save the results
-
-// if user has an account sent status code 200
-// other wise send jwt
-exports.createListLogic = async function (req, res) {
-  // const data = {
-  //   token: req.headers.token,
-  //   listName: req.body.listName,
-  //   listDescription: req.body.listDescription,
-  //   listItems: req.body.listItems
-  // }
-  // const invalidDataErrorMessage = helper.dataValid(data)
-  // if (invalidDataErrorMessage) return res.status(412).send({ message: invalidDataErrorMessage })
-
-  // const { success, errorMessage } = helper.createListLogic(data)
-  // const statusCode = success ? 200 : 503
-  // return res.json({ success, message: errorMessage }).status(statusCode)
+const generateAnimeListObject = async function (userId, data) {
+  const animeList = await new AnimeList({
+    userId,
+    animeListName: data.listName,
+    animeListDescription: data.listDescription,
+    animeList: Array.from(
+      new Set(data.listItems)
+    ),
+    animeRecommendations: await recommendations.generateRecommendations(data.listItems)
+  })
+  return animeList
 }
 
-exports.bodyValid = function (body) {
-  return true
-  // const data = {
-  //   token: req.headers.token,
-  //   listName: req.body.listName,
-  //   listDescription: req.body.listDescription,
-  //   listItems: req.body.listItems
-  // }
-  // let errorMessage = null
-  // if (body.hasPhoneNumber === true) {
-  //   const validPhoneNumber = validate.validatePhoneNumber(body.phoneNumber)
-  //   const validCarrier = validate.validateCarrier(body.carrier)
-  //   if (!validPhoneNumber || !validCarrier) {
-  //     errorMessage = (
-  //       !validPhoneNumber && !validCarrier ? 'Invalid phone number and carrier' : (
-  //         !validPhoneNumber ? 'Invalid phone number' : 'Invalid carrier'
-  //       )
-  //     )
-  //   }
-  // }
-  // return errorMessage
+exports.createListLogic = async function (data) {
+  let success = false
+  let errorMessage = null
+
+  try {
+    const { id, tokenExpired } = await auth.getIdFromJWTToken(data.token)
+
+    if (id) {
+      const animeList = await generateAnimeListObject(id, data)
+      await animeList.save()
+      success = true
+    } else if (tokenExpired) {
+      errorMessage = 'Token expired'
+    } else {
+      errorMessage = 'Bad token'
+    }
+  } catch (error) {
+    console.error('Error:', error)
+    errorMessage = 'Error creating list'
+  }
+
+  return { success, message: errorMessage }
+}
+
+exports.dataValid = function (data) {
+  let errorMessage = null
+  const validListName = validate.validateListName(data.listName)
+  const validListDescription = validate.validateListDescription(data.listDescription, true)
+  const validListItems = validate.validateListItems(data.listItems, true)
+  if (!validListName || !validListDescription || !validListItems) {
+    errorMessage = (
+      !validListItems ? 'Invalid list or list items' : (
+        !validListName ? 'Invalid list name' : 'Invalid list description'
+      )
+    )
+  }
+  return errorMessage
 }

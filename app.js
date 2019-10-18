@@ -4,14 +4,18 @@ const compress = require('compression')
 // importing routes
 const homeRoute = require('./routes/home')
 const createListRoute = require('./routes/List/Create/CreateList')
+const updateListRoute = require('./routes/List/Update/UpdateList')
+const deleteListRoute = require('./routes/List/Delete/DeleteList')
+const getListRoute = require('./routes/List/Get/GetList')
+const getListsRoute = require('./routes/Account/Lists/Get/GetLists')
 const authSignUp = require('./routes/Auth/SignUp/SignUp')
 const authSignIn = require('./routes/Auth/SignIn/SignIn')
 const searchAnimeRoute = require('./routes/Search/search')
 const accountPhoneRoutes = require('./routes/Account/Phone/Phone')
-const deleteListRoute = require('./routes/List/DeleteList/deleteList')
 
 // importting middleware and functions
-const validateList = require('./middleware/validateListInput')
+// const validateList = require('./middleware/validateListInput')
+const genericMiddleware = require('./middleware/list/BodyValidator')
 const queryTypeString = require('./routes/Search/middleware')
 const authMiddleware = require('./middleware/auth/BodyValidator')
 const accountMiddleware = require('./middleware/account/BodyValidator')
@@ -35,10 +39,30 @@ TestFunction.getAnimeDataForList(['1', '21', '2798', '2829'])
 // endpoints
 app.get('/', homeRoute.home)
 
+app.get(
+  '/api/v0/lists',
+  accountMiddleware.checkHeaderAndBodyValue,
+  getListsRoute.getLists
+)
 app.post(
-  '/api/v0/create/new/list',
-  validateList.validateListInput,
+  '/api/v0/list',
+  accountMiddleware.checkHeaderAndBodyValue,
   createListRoute.createList
+)
+app.patch(
+  '/api/v0/list',
+  accountMiddleware.checkHeaderAndBodyValue,
+  updateListRoute.updateList
+)
+app.get(
+  '/api/v0/list/:listId',
+  genericMiddleware.checkBodyValue,
+  getListRoute.getList
+)
+app.delete(
+  '/api/v0/list/:listId',
+  validateReq.checkHeaderAndBodyValue,
+  deleteListRoute.deleteList
 )
 app.get(
   '/api/v0/user/phone',
@@ -69,12 +93,6 @@ app.post(
   '/api/v0/user/signin',
   authMiddleware.checkBodyValue,
   authSignIn.signin
-)
-
-app.delete(
-  '/api/v0/remove/:listId',
-  validateReq.checkHeaderAndBodyValue,
-  deleteListRoute.deleteList
 )
 
 module.exports = app

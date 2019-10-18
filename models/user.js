@@ -44,12 +44,6 @@ const UserSchema = new Schema({
     default: Date.now
   },
 
-  userAnimeList: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'AnimeList'
-    }
-  ],
   animeRating: [[Number], [Number]]
 })
 
@@ -66,6 +60,7 @@ UserSchema.set('toJSON', { virtuals: true })
 
 UserSchema.plugin(mongooseHidden, {
   virtuals: {
+    userEmail: 'hideJSON',
     createdAt: 'hideJSON',
     password: 'hideJSON',
     phoneNumber: 'hideJSON',

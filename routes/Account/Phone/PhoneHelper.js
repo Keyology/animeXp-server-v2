@@ -1,4 +1,4 @@
-const User = require('../../../models/user')
+const User = require('../../../models/User')
 const validate = require('../../../common/validator')
 const auth = require('../../../common/auth')
 
@@ -30,7 +30,6 @@ exports.getPhoneAndCarrierLogic = async function (data) {
 exports.setPhoneAndCarrierLogic = async function (data) {
   let success = false
   let errorMessage = 'Error getting carrier and phone number'
-  console.log('setPhoneAndCarrierLogic')
   try {
     const { id, generateNewId } = await auth.getIdFromJWTToken(data.token)
     if (id) {
