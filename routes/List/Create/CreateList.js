@@ -4,14 +4,14 @@ const helper = require('./CreateListHelper')
 exports.createList = async function (req, res) {
   const data = {
     token: req.headers.token,
-    listName: req.body.listName,
-    listDescription: req.body.listDescription,
-    listItems: req.body.listItems
+    listName: req.body.list_name,
+    listDescription: req.body.list_description,
+    listItems: req.body.list_items
   }
   const invalidDataErrorMessage = helper.dataValid(data)
   if (invalidDataErrorMessage) return res.status(412).send({ message: invalidDataErrorMessage })
 
-  const { success, errorMessage } = helper.createListLogic(data)
+  const { success, message } = await helper.createListLogic(data)
   const statusCode = success ? 200 : 503
-  return res.json({ success, message: errorMessage }).status(statusCode)
+  return res.json({ success, message }).status(statusCode)
 }

@@ -8,7 +8,9 @@ const generateAnimeListObject = async function (userId, data) {
     userId,
     animeListName: data.listName,
     animeListDescription: data.listDescription,
-    animeList: data.listItems,
+    animeList: Array.from(
+      new Set(data.listItems)
+    ),
     animeRecommendations: await recommendations.generateRecommendations(data.listItems)
   })
   return animeList
@@ -16,7 +18,7 @@ const generateAnimeListObject = async function (userId, data) {
 
 exports.createListLogic = async function (data) {
   let success = false
-  let errorMessage = 'Error signing'
+  let errorMessage = null
 
   try {
     const { id, tokenExpired } = await auth.getIdFromJWTToken(data.token)
@@ -32,14 +34,15 @@ exports.createListLogic = async function (data) {
     }
   } catch (error) {
     console.log('Error:', error)
+    errorMessage = 'Error signing'
   }
 
-  return { success, errorMessage }
+  return { success, message: errorMessage }
 }
 
 exports.dataValid = function (data) {
   let errorMessage = null
-  const validToken = validate.validateToken(data.token)
+  const validToken = validate.hasToken(data.token)
   const validListName = validate.validateListName(data.listName)
   const validListDescription = validate.validateListDescription(data.listDescription, true)
   const validListItems = validate.validateListItems(data.listItems, true)

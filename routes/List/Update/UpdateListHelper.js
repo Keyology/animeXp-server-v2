@@ -3,15 +3,18 @@ const validate = require('../../../common/validator')
 const auth = require('../../../common/auth')
 const recommendations = require('../helper/generateRecommendations')
 
-const updateAnimeListObject = async function (animeList, newAnimeItems) {
-  animeList.animeList.push(...newAnimeItems)
-  animeList.animeRecommendations = recommendations.generateRecommendations(animeList.animeList)
-  return animeList
+const updateAnimeListObject = async function (animeListMongoObject, newAnimeItems) {
+  animeListMongoObject.animeList = Array.from(
+    new Set(animeListMongoObject.animeList.concat(newAnimeItems))
+  )
+  animeListMongoObject.animeRecommendations = await recommendations.generateRecommendations(
+    animeListMongoObject.animeList
+  )
 }
 
 exports.updateListLogic = async function (data) {
   let success = false
-  let errorMessage = 'Error signing'
+  let errorMessage = null
 
   try {
     const { id, tokenExpired } = await auth.getIdFromJWTToken(data.token)
@@ -23,7 +26,8 @@ exports.updateListLogic = async function (data) {
           userId: id
         }
       )
-      await updateAnimeListObject(animeList, data.listItems).save()
+      await updateAnimeListObject(animeList, data.newItems)
+      animeList.save()
       success = true
     } else if (tokenExpired) {
       errorMessage = 'Token expired'
@@ -32,16 +36,17 @@ exports.updateListLogic = async function (data) {
     }
   } catch (error) {
     console.log('Error:', error)
+    errorMessage = 'Error signing'
   }
 
-  return { success, errorMessage }
+  return { success, message: errorMessage }
 }
 
 exports.dataValid = function (data) {
   let errorMessage = null
-  const validToken = validate.validateToken(data.token)
+  const validToken = validate.hasToken(data.token)
   const validListId = validate.validateListId(data.listId)
-  const validListItems = validate.validateListItems(data.listItems)
+  const validListItems = validate.validateListItems(data.newItems)
   if (!validToken || !validListItems || !validListId) {
     errorMessage = (!validToken
       ? 'Invalid Token' : (

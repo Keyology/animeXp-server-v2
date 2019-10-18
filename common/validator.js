@@ -101,7 +101,9 @@ exports.validateListName = function (listName) {
 exports.validateListDescription = function (listDescription, canBeEmpty = true) {
   let valid = false
   try {
-    if (listDescription && check.string(listDescription)) {
+    console.log('listDescription && check.string(listDescription)', listDescription && check.string(listDescription))
+    if ((listDescription || listDescription === '') && check.string(listDescription)) {
+      console.log('canBeEmpty || (listDescription.replace.length > 0)', canBeEmpty || (listDescription.replace(' ', '').length > 0))
       if (canBeEmpty || (listDescription.replace(' ', '').length > 0)) {
         valid = true
       }
@@ -109,18 +111,16 @@ exports.validateListDescription = function (listDescription, canBeEmpty = true) 
   } catch (except) {
     console.log('Except:', except)
   }
+  console.log('valid', valid)
   return valid
 }
 
 exports.validateListItems = function (listItems, canBeEmpty = false) {
   let valid = false
   try {
-    if (listItems && check.array(listItems)) {
-      if (listItems.length === 0) {
-        if (canBeEmpty) {
-          valid = true
-        }
-        valid = false
+    if (listItems && check.arrayLike(listItems)) {
+      if (canBeEmpty && check.emptyArray(listItems.length)) {
+        valid = true
       } else {
         valid = true
         let item

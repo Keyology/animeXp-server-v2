@@ -6,7 +6,7 @@ const AnimeListSchema = new Schema({
   userId: String,
   animeListName: String,
   animeListDescription: String,
-  animeList: [[String]],
+  animeList: [String],
 
   animeRecommendations: [],
 
