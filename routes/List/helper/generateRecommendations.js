@@ -1,4 +1,4 @@
-const AnimeRecommendations = require('../../../models/AnimeRecs')
+const AnimeRecommendations = require('../../../models/animeRecs')
 
 // Each anime in the user's original list will have a list of recommendations associated with them,
 // some anime may have a empty list for their recommendations. This method gets the

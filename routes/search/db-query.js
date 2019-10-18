@@ -1,4 +1,4 @@
-const Anime = require('../../models/Anime')
+const Anime = require('../../models/anime')
 const cleanData = require('./cleanResp')
 
 exports.searchAnimeByName = async (query) => {

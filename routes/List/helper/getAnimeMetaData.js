@@ -1,4 +1,4 @@
-const Anime = require('../../../models/Anime')
+const Anime = require('../../../models/anime')
 
 exports.getAnimeDataForList = async function (animeList) {
   const originalIndexes = {}

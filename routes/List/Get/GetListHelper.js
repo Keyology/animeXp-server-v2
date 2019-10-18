@@ -1,4 +1,4 @@
-const AnimeList = require('../../../models/AnimeList')
+const AnimeList = require('../../../models/animeList')
 const validate = require('../../../common/validator')
 
 exports.getListLogic = async function (data) {
