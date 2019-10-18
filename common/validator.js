@@ -109,7 +109,6 @@ exports.validateListDescription = function (listDescription, canBeEmpty = true) 
   } catch (except) {
     console.error('Except:', except)
   }
-  console.log('valid', valid)
   return valid
 }
 

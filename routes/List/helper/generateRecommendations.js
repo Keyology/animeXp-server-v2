@@ -1,21 +1,16 @@
-const AnimeRecommendations = require('../../../models/animeRecs')
+const AnimeRecommendations = require('../../../models/AnimeRecs')
 
 // Each anime in the user's original list will have a list of recommendations associated with them,
 // some anime may have a empty list for their recommendations. This method gets the
-// indexes of the lists that are not empty, as well as get the max number recommendations for
-// any of the list of recommendations.
-const getAllowedRecommendationListsAndMaxNumberOfRecommendations = function (recommendations) {
-  const nonEmptyAnimeListsIndexes = Set()
-  let maxLengthOfRecommendationsPerAnime = recommendations[0].animeRecommendations.length
+// indexes of the lists that are not empty.
+const getAllowedRecommendationLists = function (recommendations) {
+  const nonEmptyAnimeListsIndexes = new Set()
   // Getting the max number of recommendations per anime
   for (let i = 0; i < recommendations.length; i++) {
-    if (recommendations[i].animeRecommendations.length > maxLengthOfRecommendationsPerAnime) {
-      maxLengthOfRecommendationsPerAnime = recommendations[i].animeRecommendations.length
-    }
     if (recommendations[i].animeRecommendations.length > 0) nonEmptyAnimeListsIndexes.add(i)
   }
 
-  return { maxLengthOfRecommendationsPerAnime, nonEmptyAnimeListsIndexes }
+  return { nonEmptyAnimeListsIndexes }
 }
 
 // Sum up the similarity score for each anime recommendation across each anime in the
@@ -28,18 +23,20 @@ const averageScoreForEachRecommendation = function (
   const scoreForEachAnime = {}
   // This sums the similarity scores for each anime recommendation
   let animeListIndex
-  for (animeListIndex in nonEmptyAnimeListsIndexes) {
+  for (animeListIndex of nonEmptyAnimeListsIndexes) {
     const recommendationsForAnime = recommendationsForEachAnime[animeListIndex].animeRecommendations
-    Object.keys(recommendationsForAnime).map(
-      function (animeRecId, index) {
-        // Exclude anime that is already in the user's list
-        if (!animeInUserListSet.has(animeRecId)) {
-          scoreForEachAnime[animeRecId] = scoreForEachAnime[animeRecId]
-            ? scoreForEachAnime[animeRecId] + recommendationsForAnime[animeRecId]
-            : recommendationsForAnime[animeRecId]
-        }
+    // console.log('recommendationsForAnime', recommendationsForAnime)
+    let animeRecObject
+    for (animeRecObject of recommendationsForAnime) {
+      const animeRecId = animeRecObject.animeId
+      const animeRecScore = animeRecObject.animeScore
+      // Exclude anime that is already in the user's list
+      if (!animeInUserListSet.has(animeRecId)) {
+        scoreForEachAnime[animeRecId] = scoreForEachAnime[animeRecId]
+          ? scoreForEachAnime[animeRecId] + animeRecScore
+          : animeRecScore
       }
-    )
+    }
   }
   // This averages the summed score for each anime recommendation
   Object.keys(scoreForEachAnime).map(
@@ -60,25 +57,25 @@ const rankAnime = function (scoreForEachAnime) {
 // then produces the top recommendations for that anime list
 const getMostPopularAnimeUsingAverageScore = function (animeList, recommendationsForEachAnime) {
   const {
-    maxLengthOfRecommendationsPerAnime,
     nonEmptyAnimeListsIndexes
-  } = getAllowedRecommendationListsAndMaxNumberOfRecommendations(recommendationsForEachAnime)
+  } = getAllowedRecommendationLists(recommendationsForEachAnime)
   const animeInUserListSet = new Set(animeList)
   const scoreForEachAnime = averageScoreForEachRecommendation(
-    maxLengthOfRecommendationsPerAnime,
     nonEmptyAnimeListsIndexes,
     recommendationsForEachAnime,
     animeInUserListSet
   )
-
-  return rankAnime(scoreForEachAnime)
+  const rankedAnimeRecs = rankAnime(scoreForEachAnime)
+  return rankedAnimeRecs
 }
 
 // Public method for generation anime recommendations for an anime list
 exports.generateRecommendations = async function (userAnimeList) {
+  // Maybe we need to combine Anime and AnimeRecommendation
+  // so we don't need to do seperate calls for getting anime recs and anime recs with meta data
   const recommendations = await AnimeRecommendations.find({
     animeId: { $in: userAnimeList }
   })
   if (recommendations.length === 0) return []
-  return getMostPopularAnimeUsingAverageScore(userAnimeList, recommendations)
+  return getMostPopularAnimeUsingAverageScore(userAnimeList, recommendations).slice(0, 100)
 }

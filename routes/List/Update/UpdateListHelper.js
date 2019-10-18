@@ -1,13 +1,13 @@
 const AnimeList = require('../../../models/AnimeList')
 const validate = require('../../../common/validator')
 const auth = require('../../../common/auth')
-const recommendations = require('../helper/generateRecommendations')
+const recommendations = require('../helper/generateRecommendationsWithMetaData')
 
 const updateAnimeListObject = async function (animeListMongoObject, newAnimeItems) {
   animeListMongoObject.animeList = Array.from(
     new Set(animeListMongoObject.animeList.concat(newAnimeItems))
   )
-  animeListMongoObject.animeRecommendations = await recommendations.generateRecommendations(
+  animeListMongoObject.animeRecommendations = await recommendations.generateRecommendationsWithMetaData(
     animeListMongoObject.animeList
   )
 }

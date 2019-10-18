@@ -2,9 +2,13 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const AnimeRecsSchema = new Schema({
-  animeId: String,
+  animeId: {
+    type: String,
+    required: true,
+    unique: true
+  },
 
   animeRecommendations: [{ animeId: String, animeScore: Number }]
 })
 
-module.exports = mongoose.model('AnimeRecsSchema', AnimeRecsSchema)
+module.exports = mongoose.model('AnimeRecommendations', AnimeRecsSchema)
