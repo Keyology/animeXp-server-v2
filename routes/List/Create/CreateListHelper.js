@@ -2,7 +2,7 @@ const AnimeList = require('../../../models/AnimeList')
 const validate = require('../../../common/validator')
 const auth = require('../../../common/auth')
 const recommendations = require('../helper/generateRecommendations')
-
+const getAnimeListinfo = require('../helper/getPosterImg')
 const generateAnimeListObject = async function (userId, data) {
   const animeList = await new AnimeList({
     userId,
@@ -11,7 +11,11 @@ const generateAnimeListObject = async function (userId, data) {
     animeList: Array.from(
       new Set(data.listItems)
     ),
-    animeRecommendations: await recommendations.generateRecommendations(data.listItems)
+    // animeRecommendations: await recommendations.generateRecommendations(data.listItems)
+    animeRecommendations: await getAnimeListinfo.getAnimeDataForList(
+      await recommendations.generateRecommendations(data.listItems)
+    )
+
   })
   return animeList
 }
