@@ -60,6 +60,7 @@ UserSchema.set('toJSON', { virtuals: true })
 
 UserSchema.plugin(mongooseHidden, {
   virtuals: {
+    userEmail: 'hideJSON',
     createdAt: 'hideJSON',
     password: 'hideJSON',
     phoneNumber: 'hideJSON',
