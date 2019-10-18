@@ -8,6 +8,7 @@ exports.deleteListLogic = async function (data) {
 
   try {
     const { id, tokenExpired } = await auth.getIdFromJWTToken(data.token)
+    console.log('id, tokenExpired ', id, tokenExpired)
 
     if (id) {
       await AnimeList.findOneAndDelete({ _id: data.listId, userId: id })

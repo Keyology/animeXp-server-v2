@@ -7,6 +7,7 @@ const createListRoute = require('./routes/List/Create/CreateList')
 const updateListRoute = require('./routes/List/Update/UpdateList')
 const deleteListRoute = require('./routes/List/Delete/DeleteList')
 const getListRoute = require('./routes/List/Get/GetList')
+const getListsRoute = require('./routes/Account/Lists/Get/GetLists')
 const authSignUp = require('./routes/Auth/SignUp/SignUp')
 const authSignIn = require('./routes/Auth/SignIn/SignIn')
 const searchAnimeRoute = require('./routes/Search/search')
@@ -35,6 +36,11 @@ require('./config/db')
 // endpoints
 app.get('/', homeRoute.home)
 
+app.get(
+  '/api/v0/lists',
+  accountMiddleware.checkHeaderAndBodyValue,
+  getListsRoute.getLists
+)
 app.post(
   '/api/v0/list',
   accountMiddleware.checkHeaderAndBodyValue,
@@ -47,7 +53,7 @@ app.patch(
 )
 app.get(
   '/api/v0/list/:listId',
-  genericMiddleware,
+  genericMiddleware.checkBodyValue,
   getListRoute.getList
 )
 app.delete(

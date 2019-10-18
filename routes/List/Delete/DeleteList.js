@@ -2,6 +2,7 @@ const helper = require('./DeleteListHelper')
 
 exports.deleteList = async function (req, res) {
   const data = {
+    token: req.headers.token,
     listId: req.params.listId
   }
   const invalidDataErrorMessage = await helper.dataValid(data)

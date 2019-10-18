@@ -7,7 +7,7 @@ exports.getList = async function (req, res) {
   const invalidDataErrorMessage = await helper.dataValid(data)
   if (invalidDataErrorMessage) return res.status(412).send({ message: invalidDataErrorMessage })
 
-  const { success, message } = await helper.getListLogic(data)
+  const { success, list, message } = await helper.getListLogic(data)
   const statusCode = success ? 200 : 503
-  return res.json({ success, message }).status(statusCode)
+  return res.json({ success, list, message }).status(statusCode)
 }
