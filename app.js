@@ -1,4 +1,5 @@
 const express = require('express')
+const cors = require('cors')
 const compress = require('compression')
 
 // importing routes
@@ -17,16 +18,17 @@ const accountPhoneRoutes = require('./routes/Account/Phone/Phone')
 
 // importting middleware and functions
 // const validateList = require('./middleware/validateListInput')
-const genericMiddleware = require('./middleware/list/BodyValidator')
+const genericMiddleware = require('./middleware/List/BodyValidator')
 const queryTypeString = require('./routes/Search/middleware')
-const authMiddleware = require('./middleware/auth/BodyValidator')
-const accountMiddleware = require('./middleware/account/BodyValidator')
+const authMiddleware = require('./middleware/Auth/BodyValidator')
+const accountMiddleware = require('./middleware/Account/BodyValidator')
 const validateReq = require('./middleware/Account/BodyValidator')
 
 // intializing express
 const app = express()
 
 // middleware
+app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(compress())
