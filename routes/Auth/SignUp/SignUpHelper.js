@@ -2,6 +2,7 @@ const User = require('../../../models/User')
 const bcrypt = require('bcryptjs')
 const validate = require('../../../common/validator')
 const auth = require('../../../common/auth')
+const createListHelper = require('../../List/Create/CreateListHelper')
 
 exports.signUpLogic = async function (data) {
   let userId = null
@@ -54,20 +55,24 @@ exports.signUpLogic = async function (data) {
   return { successfullySignedUp, jwtToken, errorMessage }
 }
 
-exports.signUpImplicitLogic = async function () {
+exports.signUpImplicitLogic = async function (data) {
   let successfullySignedUp = false
   let jwtToken = null
+  let animeList = null
   try {
-    const user = await new User().save()
+    const user = await (new User()).save()
+    if (!createListHelper.dataInvalid(data)) {
+      animeList = await createListHelper.generateAnimeListObject(user._id, data)
+    }
     jwtToken = await auth.generateJWTToken(user._id, 1)
     successfullySignedUp = true
   } catch (exception) {
     console.error('Exception:', exception)
   }
-  return { successfullySignedUp, jwtToken }
+  return { successfullySignedUp, animeList, jwtToken }
 }
 
-exports.bodyValid = function (body) {
+exports.bodyInvalid = function (body) {
   let errorMessage = null
   if (body.hasPhoneNumber === true) {
     const validPhoneNumber = validate.validatePhoneNumber(body.phoneNumber)

@@ -8,7 +8,7 @@ exports.createList = async function (req, res) {
     listDescription: req.body.list_description,
     listItems: req.body.list_items
   }
-  const invalidDataErrorMessage = helper.dataValid(data)
+  const invalidDataErrorMessage = helper.dataInvalid(data)
   if (invalidDataErrorMessage) return res.status(412).send({ message: invalidDataErrorMessage })
 
   const { success, list, message } = await helper.createListLogic(data)

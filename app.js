@@ -97,6 +97,7 @@ app.post(
 )
 app.post(
   '/api/v0/user/signup/implicit',
+  genericMiddleware.checkBodyValue,
   authSignUp.signupImplicit
 )
 app.post(

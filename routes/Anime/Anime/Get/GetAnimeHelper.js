@@ -18,7 +18,7 @@ exports.getAnimeLogic = async function (data) {
   return { success, anime, message: errorMessage }
 }
 
-exports.dataValid = function (data) {
+exports.dataInvalid = function (data) {
   const validAnimeId = validate.validateAnimeId(data.animeId)
   const errorMessage = validAnimeId ? null : 'Invalid anime id'
   return errorMessage
