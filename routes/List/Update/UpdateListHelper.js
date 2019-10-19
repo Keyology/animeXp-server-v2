@@ -42,7 +42,7 @@ exports.updateListLogic = async function (data) {
   return { success, message: errorMessage }
 }
 
-exports.dataValid = function (data) {
+exports.dataInvalid = function (data) {
   let errorMessage = null
   const validListId = validate.validateListId(data.listId)
   const validListItems = validate.validateListItems(data.newItems)

@@ -51,7 +51,7 @@ exports.setPhoneAndCarrierLogic = async function (data) {
   return { success, phoneNumber: data.phoneNumber, carrier: data.carrier, errorMessage }
 }
 
-exports.bodyValid = function (body) {
+exports.bodyInvalid = function (body) {
   let errorMessage = null
   const validPhoneNumber = validate.validatePhoneNumber(body.phoneNumber)
   const validCarrier = validate.validateCarrier(body.carrier)

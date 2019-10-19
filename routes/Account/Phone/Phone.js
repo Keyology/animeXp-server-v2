@@ -18,7 +18,7 @@ exports.setPhoneAndCarrier = async function (req, res) {
     phoneNumber: req.body.phone_number,
     carrier: req.body.carrier
   }
-  const bodyInvalidMessage = helper.bodyValid(body)
+  const bodyInvalidMessage = helper.bodyInvalid(body)
   if (bodyInvalidMessage) return res.status(412).send({ message: bodyInvalidMessage })
   const { success, phoneNumber, carrier, errorMessage } = await helper.setPhoneAndCarrierLogic(body)
 
