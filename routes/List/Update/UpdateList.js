@@ -4,7 +4,7 @@ const helper = require('./UpdateListHelper')
 exports.updateList = async function (req, res) {
   const data = {
     token: req.headers.token,
-    listId: req.body.list_id,
+    listIds: req.body.list_ids,
     newItems: req.body.new_items
   }
   const invalidDataErrorMessage = await helper.dataInvalid(data)

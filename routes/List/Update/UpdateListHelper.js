@@ -44,10 +44,10 @@ exports.updateListLogic = async function (data) {
 
 exports.dataInvalid = function (data) {
   let errorMessage = null
-  const validListId = validate.validateListId(data.listId)
+  const validListIds = validate.validateListIds(data.listIds)
   const validListItems = validate.validateListItems(data.newItems)
-  if (!validListItems || !validListId) {
-    errorMessage = !validListId ? 'Invalid list id' : 'Invalid list or list items'
+  if (!validListItems || !validListIds) {
+    errorMessage = !validListIds ? 'Invalid list ids' : 'Invalid list or list items'
   }
   return errorMessage
 }
