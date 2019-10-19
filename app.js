@@ -43,7 +43,7 @@ app.get(
   getAnimeRoute.getAnime
 )
 app.get(
-  '/api/v0/anime/popular',
+  '/api/v0/anime/popular/most',
   getMostPopularAnimeRoute.getMostPopular
 )
 
