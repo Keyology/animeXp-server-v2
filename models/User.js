@@ -47,15 +47,6 @@ const UserSchema = new Schema({
   animeRating: [[Number], [Number]]
 })
 
-// UserSchema.index({
-//   userEmail: 1,
-//   phoneNumber: 1
-// }, {
-//   unique: true,
-//   sparse: true,
-//   dropDups: true
-// })
-
 UserSchema.set('toJSON', { virtuals: true })
 
 UserSchema.plugin(mongooseHidden, {
