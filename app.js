@@ -21,6 +21,7 @@ const authMiddleware = require('./middleware/auth/BodyValidator')
 const accountMiddleware = require('./middleware/account/BodyValidator')
 const validateReq = require('./middleware/Account/BodyValidator')
 
+
 // intializing express
 const app = express()
 
