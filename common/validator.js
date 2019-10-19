@@ -146,3 +146,15 @@ exports.validateListId = function (listId) {
   }
   return valid
 }
+
+exports.validateAnimeId = function (animeId) {
+  let valid = false
+  try {
+    if (animeId && check.string(animeId) && animeId.length > 0) {
+      valid = true
+    }
+  } catch (error) {
+    console.error('Error:', error)
+  }
+  return valid
+}
