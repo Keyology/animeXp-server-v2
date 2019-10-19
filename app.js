@@ -17,10 +17,10 @@ const accountPhoneRoutes = require('./routes/Account/Phone/Phone')
 
 // importting middleware and functions
 // const validateList = require('./middleware/validateListInput')
-const genericMiddleware = require('./middleware/list/BodyValidator')
+const genericMiddleware = require('./middleware/List/BodyValidator')
 const queryTypeString = require('./routes/Search/middleware')
-const authMiddleware = require('./middleware/auth/BodyValidator')
-const accountMiddleware = require('./middleware/account/BodyValidator')
+const authMiddleware = require('./middleware/Auth/BodyValidator')
+const accountMiddleware = require('./middleware/Account/BodyValidator')
 const validateReq = require('./middleware/Account/BodyValidator')
 
 
