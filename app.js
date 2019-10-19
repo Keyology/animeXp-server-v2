@@ -3,6 +3,8 @@ const compress = require('compression')
 
 // importing routes
 const homeRoute = require('./routes/home')
+const getAnimeRoute = require('./routes/Anime/Anime/Get/GetAnime')
+const getMostPopularAnimeRoute = require('./routes/Anime/MostPopular/Get/GetMostPopular')
 const createListRoute = require('./routes/List/Create/CreateList')
 const updateListRoute = require('./routes/List/Update/UpdateList')
 const deleteListRoute = require('./routes/List/Delete/DeleteList')
@@ -35,6 +37,15 @@ require('./config/db')
 
 // endpoints
 app.get('/', homeRoute.home)
+
+app.get(
+  '/api/v0/anime/:animeId',
+  getAnimeRoute.getAnime
+)
+app.get(
+  '/api/v0/anime/popular',
+  getMostPopularAnimeRoute.getMostPopular
+)
 
 app.get(
   '/api/v0/lists',
