@@ -7,7 +7,7 @@ exports.updateList = async function (req, res) {
     listId: req.body.list_id,
     newItems: req.body.new_items
   }
-  const invalidDataErrorMessage = await helper.dataValid(data)
+  const invalidDataErrorMessage = await helper.dataInvalid(data)
   if (invalidDataErrorMessage) return res.status(412).send({ message: invalidDataErrorMessage })
 
   const { success, message } = await helper.updateListLogic(data)

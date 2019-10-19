@@ -33,7 +33,7 @@ exports.getMostPopularLogic = async function () {
   return { success, anime, message: errorMessage }
 }
 
-exports.dataValid = function (data) {
+exports.dataInvalid = function (data) {
   const validListId = validate.validateListId(data.listId)
   const errorMessage = validListId ? null : 'Invalid list id'
   return errorMessage

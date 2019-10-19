@@ -16,6 +16,8 @@ const generateAnimeListObject = async function (userId, data) {
   return animeList
 }
 
+exports.generateAnimeListObject = generateAnimeListObject
+
 exports.createListLogic = async function (data) {
   let success = false
   let errorMessage = null
@@ -41,7 +43,7 @@ exports.createListLogic = async function (data) {
   return { success, list: animeList, message: errorMessage }
 }
 
-exports.dataValid = function (data) {
+exports.dataInvalid = function (data) {
   let errorMessage = null
   const validListName = validate.validateListName(data.listName)
   const validListDescription = validate.validateListDescription(data.listDescription, true)
