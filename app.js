@@ -2,6 +2,9 @@ const express = require('express')
 const cors = require('cors')
 const compress = require('compression')
 
+const mongoose = require('mongoose')
+mongoose.set('debug', false)
+
 // importing routes
 const homeRoute = require('./routes/home')
 const getAnimeRoute = require('./routes/Anime/Anime/Get/GetAnime')

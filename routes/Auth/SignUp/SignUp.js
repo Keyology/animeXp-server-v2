@@ -18,7 +18,6 @@ exports.signup = async function (req, res) {
   const body = {
     email: req.body.email,
     password: req.body.password,
-    hasPhoneNumber: req.body.has_phone_number,
     carrier: req.body.carrier,
     phoneNumber: req.body.phone_number,
     token: req.headers ? req.headers.token : null

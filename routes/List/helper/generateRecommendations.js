@@ -7,7 +7,7 @@ const AnimeRecommendations = require('../../../models/AnimeRecs')
  *
  * @param {List[AnimeRec]} recommendations - A list of AnimeRec objects
  *
- * @output {Object} - An object with a single key and value (value is a list of integers).
+ * @output {Set[Integer]} - An array filled with Integers.
  */
 const getAllowedRecommendationLists = function (recommendations) {
   const nonEmptyAnimeListsIndexes = new Set()
@@ -16,7 +16,7 @@ const getAllowedRecommendationLists = function (recommendations) {
     if (recommendations[i].animeRecommendations.length > 0) nonEmptyAnimeListsIndexes.add(i)
   }
 
-  return { nonEmptyAnimeListsIndexes }
+  return nonEmptyAnimeListsIndexes
 }
 
 /**
@@ -51,10 +51,11 @@ const averageScoreForEachRecommendation = function (
       }
     }
   }
+
   // This averages the summed score for each anime recommendation
   Object.keys(scoreForEachAnime).map(
     function (animeRecId, index) {
-      scoreForEachAnime[animeRecId] /= nonEmptyAnimeListsIndexes.length
+      scoreForEachAnime[animeRecId] /= nonEmptyAnimeListsIndexes.size
     }
   )
   return scoreForEachAnime
@@ -75,10 +76,8 @@ const rankAnime = function (scoreForEachAnime) {
  *
  * @output {List[String]} A list of anime ids in a descending order based off postive score
  */
-const getMostPopularAnimeUsingAverageScore = function (animeList, recommendationsForEachAnime) {
-  const {
-    nonEmptyAnimeListsIndexes
-  } = getAllowedRecommendationLists(recommendationsForEachAnime)
+const getMostSimilarAnimeUsingAverageScore = function (animeList, recommendationsForEachAnime) {
+  const nonEmptyAnimeListsIndexes = getAllowedRecommendationLists(recommendationsForEachAnime)
   const animeInUserListSet = new Set(animeList)
   const scoreForEachAnime = averageScoreForEachRecommendation(
     nonEmptyAnimeListsIndexes,
@@ -102,6 +101,8 @@ exports.generateRecommendations = async function (userAnimeList) {
   const recommendations = await AnimeRecommendations.find({
     animeId: { $in: userAnimeList }
   })
-  if (recommendations.length === 0) return []
-  return getMostPopularAnimeUsingAverageScore(userAnimeList, recommendations).slice(0, 100)
+  if (!recommendations || recommendations.length === 0) return []
+  const s = getMostSimilarAnimeUsingAverageScore(userAnimeList, recommendations).slice(0, 100)
+  console.log('Recommendations', s.slice(0, 5))
+  return s
 }

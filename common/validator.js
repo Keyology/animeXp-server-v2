@@ -65,7 +65,10 @@ exports.validateHasPhoneNumber = function (hasPhoneNumber) {
 exports.validatePhoneNumber = function (phoneNumber) {
   let valid = false
   try {
-    if (phoneNumber && check.string(phoneNumber) && validator.isMobilePhone(phoneNumber)) {
+    if (
+      phoneNumber && check.string(phoneNumber) &&
+      validator.isMobilePhone(phoneNumber) && phoneNumber.length > 9
+    ) {
       valid = true
     }
   } catch (error) {

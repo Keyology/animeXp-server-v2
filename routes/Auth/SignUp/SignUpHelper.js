@@ -26,7 +26,7 @@ exports.signUpLogic = async function (data) {
         password: await bcrypt.hash(data.password, 10),
         isSignedUp: true
       }
-      if (data.hasPhoneNumber) {
+      if (data.phoneNumber) {
         userDataObject.phoneNumber = data.phoneNumber
         userDataObject.carrier = data.carrier
       }
@@ -60,9 +60,11 @@ exports.signUpImplicitLogic = async function (data) {
   let jwtToken = null
   let animeList = null
   try {
-    const user = await (new User()).save()
+    const user = await (new User().save())
     if (!createListHelper.dataInvalid(data)) {
-      animeList = await createListHelper.generateAnimeListObject(user._id, data)
+      animeList = await (
+        (await createListHelper.generateAnimeListObject(user._id, data)).save()
+      )
     }
     jwtToken = await auth.generateJWTToken(user._id, 1)
     successfullySignedUp = true
@@ -74,7 +76,7 @@ exports.signUpImplicitLogic = async function (data) {
 
 exports.bodyInvalid = function (body) {
   let errorMessage = null
-  if (body.hasPhoneNumber === true) {
+  if (body.phoneNumber === true) {
     const validPhoneNumber = validate.validatePhoneNumber(body.phoneNumber)
     const validCarrier = validate.validateCarrier(body.carrier)
     if (!validPhoneNumber || !validCarrier) {
