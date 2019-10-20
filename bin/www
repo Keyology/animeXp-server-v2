@@ -87,4 +87,6 @@ function onListening () {
   debug('Listening on ' + bind)
 }
 
+console.log(`RUNNING ON PORT:${port}`)
+
 module.exports = server

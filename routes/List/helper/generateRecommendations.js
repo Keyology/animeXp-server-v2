@@ -100,9 +100,7 @@ exports.generateRecommendations = async function (userAnimeList) {
   // so we don't need to do seperate calls for getting anime recs and anime recs with meta data
   const recommendations = await AnimeRecommendations.find({
     animeId: { $in: userAnimeList }
-  })
+  }).lean()
   if (!recommendations || recommendations.length === 0) return []
-  const s = getMostSimilarAnimeUsingAverageScore(userAnimeList, recommendations).slice(0, 100)
-  console.log('Recommendations', s.slice(0, 5))
-  return s
+  return getMostSimilarAnimeUsingAverageScore(userAnimeList, recommendations).slice(0, 100)
 }
