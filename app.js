@@ -9,7 +9,7 @@ require('dotenv').config({ path: '.env' })
 
 // connect to sentry
 Sentry.init({
-  dsn: process.env.DSN,
+  dsn: process.env.SENTRY_API_KEY,
   environment: 'Production'
 })
 

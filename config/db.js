@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const assert = require('assert')
 
-const url = process.env.db_url
+const url = process.env.DB_URL
 mongoose.Promise = global.Promise
 mongoose.connect(
   url,
