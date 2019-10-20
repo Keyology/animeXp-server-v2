@@ -10,4 +10,9 @@ RUN npm install
 
 COPY . /app
 
-CMD npm start 
+EXPOSE 7000
+
+EXPOSE 27017
+
+CMD npm run dev
+
