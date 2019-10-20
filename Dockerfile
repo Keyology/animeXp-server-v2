@@ -14,5 +14,5 @@ EXPOSE 7000
 
 EXPOSE 27017
 
-CMD npm run dev
+CMD node ./bin/www
 
