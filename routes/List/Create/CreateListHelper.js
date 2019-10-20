@@ -1,17 +1,17 @@
 const AnimeList = require('../../../models/AnimeList')
 const validate = require('../../../common/validator')
 const auth = require('../../../common/auth')
+const animeMetaData = require('../helper/getAnimeMetaData')
 const recommendations = require('../helper/generateRecommendationsWithMetaData')
 
 const generateAnimeListObject = async function (userId, data) {
+  const animeAddedByUser = Array.from(new Set(data.listItems))
   const animeList = await new AnimeList({
     userId,
     animeListName: data.listName,
     animeListDescription: data.listDescription,
-    animeList: Array.from(
-      new Set(data.listItems)
-    ),
-    animeRecommendations: await recommendations.generateRecommendationsWithMetaData(data.listItems)
+    animeList: await animeMetaData.getAnimeDataForList(animeAddedByUser),
+    animeRecommendations: await recommendations.generateRecommendationsWithMetaData(animeAddedByUser)
   })
   return animeList
 }

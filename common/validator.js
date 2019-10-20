@@ -65,7 +65,10 @@ exports.validateHasPhoneNumber = function (hasPhoneNumber) {
 exports.validatePhoneNumber = function (phoneNumber) {
   let valid = false
   try {
-    if (phoneNumber && check.string(phoneNumber) && validator.isMobilePhone(phoneNumber)) {
+    if (
+      phoneNumber && check.string(phoneNumber) &&
+      validator.isMobilePhone(phoneNumber) && phoneNumber.length > 9
+    ) {
       valid = true
     }
   } catch (error) {
@@ -135,11 +138,30 @@ exports.validateListItems = function (listItems, canBeEmpty = false) {
   return valid
 }
 
-exports.validateListId = function (listId) {
+const validateListId = function (listId) {
   let valid = false
   try {
     if (listId && check.string(listId) && listId.length > 0) {
       valid = true
+    }
+  } catch (error) {
+    console.error('Error:', error)
+  }
+  return valid
+}
+exports.validateListId = validateListId
+
+exports.validateListIds = function (listIds) {
+  let valid = false
+  try {
+    if (listIds && check.arrayLike(listIds) && listIds.length > 0) {
+      valid = true
+      for (let i = 0; i < listIds.length; i += 1) {
+        if (!validateListId(listIds[i])) {
+          valid = false
+          break
+        }
+      }
     }
   } catch (error) {
     console.error('Error:', error)
