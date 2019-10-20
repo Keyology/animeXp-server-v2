@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
-
+// file one 
 const AnimeSchema = new Schema({
   animeId: {
     type: String,
