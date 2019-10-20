@@ -1,7 +1,7 @@
 const check = require('check-types')
 const validator = require('../../common/validator')
 
-exports.checkHeaderAndBodyValue = async function (req, res, next) {  
+exports.checkHeaderAndBodyValue = async function (req, res, next) {
   const validBody = check.object(req.body)
   const validHeader = check.object(req.headers)
   const validToken = validHeader ? validator.hasToken(req.headers.token) : false
