@@ -24,17 +24,11 @@ exports.getMostPopularLogic = async function () {
       animeId: { $in: hardCodedPopularAnime }
     })
     success = !(anime === null)
-    if (!success) errorMessage = 'Bad list id'
+    if (!success) errorMessage = 'Unsuccessful. Error finding most popular anime'
   } catch (error) {
     console.error('Error:', error)
-    errorMessage = 'Error getting list'
+    errorMessage = 'Error'
   }
 
   return { success, anime, message: errorMessage }
-}
-
-exports.dataInvalid = function (data) {
-  const validListId = validate.validateListId(data.listId)
-  const errorMessage = validListId ? null : 'Invalid list id'
-  return errorMessage
 }

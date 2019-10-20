@@ -1,8 +1,14 @@
 const AnimeRecommendations = require('../../../models/AnimeRecs')
 
-// Each anime in the user's original list will have a list of recommendations associated with them,
-// some anime may have a empty list for their recommendations. This method gets the
-// indexes of the lists that are not empty.
+/**
+ * Each anime in the user's original list will have a list of recommendations associated with them,
+ * some anime may have a empty list for their recommendations. This method gets the
+ * indexes of the lists that are not empty.
+ *
+ * @param {List[AnimeRec]} recommendations - A list of AnimeRec objects
+ *
+ * @output {Object} - An object with a single key and value (value is a list of integers).
+ */
 const getAllowedRecommendationLists = function (recommendations) {
   const nonEmptyAnimeListsIndexes = new Set()
   // Getting the max number of recommendations per anime
@@ -13,8 +19,16 @@ const getAllowedRecommendationLists = function (recommendations) {
   return { nonEmptyAnimeListsIndexes }
 }
 
-// Sum up the similarity score for each anime recommendation across each anime in the
-// user's anime list, then normalizes it
+/**
+ * Sum up the similarity score for each anime recommendation across each anime in the
+ * user's anime list, then normalizes it
+ *
+ * @param {List[Integer]} nonEmptyAnimeListsIndexes
+ * @param {List[AnimeRec]} recommendationsForEachAnime
+ * @param {Set(String)} animeInUserListSet
+ *
+ * @output {Object} - Object where the keys are anime ids, and the values are floats.
+ */
 const averageScoreForEachRecommendation = function (
   nonEmptyAnimeListsIndexes,
   recommendationsForEachAnime,
@@ -25,7 +39,6 @@ const averageScoreForEachRecommendation = function (
   let animeListIndex
   for (animeListIndex of nonEmptyAnimeListsIndexes) {
     const recommendationsForAnime = recommendationsForEachAnime[animeListIndex].animeRecommendations
-    // console.log('recommendationsForAnime', recommendationsForAnime)
     let animeRecObject
     for (animeRecObject of recommendationsForAnime) {
       const animeRecId = animeRecObject.animeId
@@ -53,8 +66,15 @@ const rankAnime = function (scoreForEachAnime) {
   })
 }
 
-// This method takes in an anime list and list of recommendations,
-// then produces the top recommendations for that anime list
+/**
+ * This method takes in an anime list and list of recommendations,
+ * then produces the top recommendations for that anime list
+ *
+ * @param {List[String]} animeList
+ * @param {List[AnimeRec]} recommendationsForEachAnime
+ *
+ * @output {List[String]} A list of anime ids in a descending order based off postive score
+ */
 const getMostPopularAnimeUsingAverageScore = function (animeList, recommendationsForEachAnime) {
   const {
     nonEmptyAnimeListsIndexes
@@ -69,7 +89,13 @@ const getMostPopularAnimeUsingAverageScore = function (animeList, recommendation
   return rankedAnimeRecs
 }
 
-// Public method for generation anime recommendations for an anime list
+/**
+ * Public method for generation anime recommendations for an anime list
+ *
+ * @param {List[Integer]} userAnimeList
+ *
+ * @output {List[String]} A list of anime ids in a descending order based off postive score, max length of list is 100
+ */
 exports.generateRecommendations = async function (userAnimeList) {
   // Maybe we need to combine Anime and AnimeRecommendation
   // so we don't need to do seperate calls for getting anime recs and anime recs with meta data
