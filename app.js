@@ -5,18 +5,14 @@ const cors = require('cors')
 const compress = require('compression')
 const helmet = require('helmet')
 
-
 require('dotenv').config({ path: '.env' })
 
 // connect to sentry
 Sentry.init({
-  dsn: process.env.DSN,
+  dsn: process.env.SENTRY_API_KEY,
   environment: 'Production'
 })
 
-
-const mongoose = require('mongoose')
-mongoose.set('debug', false)
 
 // importing routes
 const homeRoute = require('./routes/home')
