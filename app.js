@@ -1,6 +1,19 @@
+
 const express = require('express')
+const Sentry = require('@sentry/node')
 const cors = require('cors')
 const compress = require('compression')
+const helmet = require('helmet')
+
+
+require('dotenv').config({ path: '.env' })
+
+// connect to sentry
+Sentry.init({
+  dsn: process.env.DSN,
+  environment: 'Production'
+})
+
 
 const mongoose = require('mongoose')
 mongoose.set('debug', false)
@@ -31,13 +44,15 @@ const validateReq = require('./middleware/Account/BodyValidator')
 const app = express()
 
 // middleware
+app.use(Sentry.Handlers.requestHandler())
+app.use(Sentry.Handlers.errorHandler())
 app.use(cors())
+app.use(helmet())
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(compress())
 
 // db setup
-require('dotenv').config({ path: '.env' })
 require('./config/db')
 
 // endpoints
