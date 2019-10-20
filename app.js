@@ -1,6 +1,18 @@
+// application monitoring tool
+require('appmetrics-dash').monitor()
 const express = require('express')
+const Sentry = require('@sentry/node')
 const cors = require('cors')
 const compress = require('compression')
+
+require('dotenv').config({ path: '.env' })
+
+// connect to sentry
+Sentry.init({
+  dsn: process.env.DSN,
+  environment: 'Production'
+})
+
 
 // importing routes
 const homeRoute = require('./routes/home')
@@ -28,13 +40,14 @@ const validateReq = require('./middleware/Account/BodyValidator')
 const app = express()
 
 // middleware
+app.use(Sentry.Handlers.requestHandler())
+app.use(Sentry.Handlers.errorHandler())
 app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(compress())
 
 // db setup
-require('dotenv').config({ path: '.env' })
 require('./config/db')
 
 // endpoints
