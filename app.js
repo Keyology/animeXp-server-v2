@@ -4,8 +4,7 @@ const Sentry = require('@sentry/node')
 const cors = require('cors')
 const compress = require('compression')
 const helmet = require('helmet')
-const StatsD = require('hot-shots')
-const  dogstatsd = new StatsD()
+
 
 require('dotenv').config({ path: '.env' })
 
