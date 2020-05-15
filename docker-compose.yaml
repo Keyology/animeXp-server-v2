@@ -4,6 +4,7 @@ services:
       build: . 
       ports: 
         - "7000:7000"
+        - "27017:27017"
       volumes: 
         - .:/app
       command: node ./bin/www

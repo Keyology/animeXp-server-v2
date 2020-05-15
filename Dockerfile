@@ -1,18 +1,22 @@
-FROM node:10-slim 
+# ------------------------------- DO NOT MODIFY ------------------------------ #
+FROM alpine:latest
+# ------------------------- IMPLEMENT SOLUTION BELOW ------------------------- #
 
-LABEL Author="keonimurray45@gmail.com"
+RUN apk add --update nodejs npm
 
-WORKDIR /app
+RUN addgroup -S node && adduser -S node -G node
 
-COPY package.json /app
+USER node
 
-RUN npm install
+RUN mkdir /home/node/app
 
-COPY . /app
+WORKDIR /home/node/app
 
-EXPOSE 7000
+COPY --chown=node:node package-lock.json package.json ./
 
-EXPOSE 27017
+RUN npm ci
 
-CMD node ./bin/www
+COPY --chown=node:node . .
+
+RUN npm install 
 

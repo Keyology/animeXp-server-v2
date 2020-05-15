@@ -7,6 +7,8 @@
 const app = require('../app')
 const debug = require('debug')('tonik-server:server')
 const http = require('http')
+const fs = require('fs')
+const path = require('path')
 
 /**
  * Get port from environment and store in Express.
@@ -19,7 +21,15 @@ app.set('port', port)
  * Create HTTP server.
  */
 
-var server = http.createServer(app)
+const options = {
+  host: '127.0.0.1',
+  port: port,
+  key: fs.readFileSync(path.resolve(__dirname, './Cert/key.pem'), 'utf8'),
+  ca: fs.readFileSync(path.resolve(__dirname, './Cert/cert.pem'), 'utf8')
+
+}
+
+const server = http.createServer(options, app)
 
 /**
  * Listen on provided port, on all network interfaces.
