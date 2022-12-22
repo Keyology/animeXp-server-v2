@@ -29,7 +29,7 @@
     "express": "^4.17.1",
     "helmet": "^3.21.1",
     "hot-shots": "^6.8.1",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "mocha": "^6.2.1",
     "mongoose": "^5.7.5",
     "mongoose-hidden": "^1.8.1",
